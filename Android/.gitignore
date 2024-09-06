@@ -1,0 +1,25 @@
+# Ignore Gradle files
+.gradle/
+*.lock
+*.bin
+*.properties
+
+# Ignore Android Studio specific files
+.idea/
+.idea/*
+
+# Ignore build folders
+/build/
+app/build/
+
+# Ignore local configuration files
+*.iml
+*.log
+local.properties  # Ignore local.properties file
+
+# Ignore specific files from your output
+.DS_Store
+.cxx/
+
+# Ignore other files like caches, compiled files, etc.
+**/build/
