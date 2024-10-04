@@ -1,6 +1,6 @@
 import pygame
 import datetime
-import timer
+import time
 from commands.straight_command import StraightCommand
 from commands.command import Command
 from robot.direction import Direction
@@ -8,6 +8,20 @@ from robot.position import RobotPosition
 from path_finding.hamiltonian import Hamiltonian
 from commands.turn_command import TurnCommand
 import constants
+
+class Timer:
+    def __init__(self):
+        self.start_time = None
+
+    def start(self):
+        self.start_time = time.time()
+
+    def end(self):
+        if self.start_time is None:
+            raise ValueError("Timer was not started.")
+        end_time = time.time()
+        elapsed_time = end_time - self.start_time
+        print(f"Total time: {elapsed_time} seconds")
 
 class Robot:
     def __init__(self, screen, grid, x, y):

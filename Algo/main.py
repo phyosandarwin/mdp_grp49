@@ -18,24 +18,25 @@ import json
 # Send the Commands to RPI
 # RPI Connection
 # Configure the client
-server_ip = "192.168.31.31"  # Replace with your PC's IP address
-server_port = 8001  # Use the same port number as on your PC
+server_ip = "10.96.49.1"  # Replace with your PC's IP address
+server_port = 8002  # Use the same port number as on your PC
 
 # # Create a socket
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # # Connect to the server
-# print("Waiting to Connect to RPI")
-# client_socket.connect((server_ip, server_port))
+print("Waiting to Connect to RPI")
+client_socket.connect((server_ip, server_port))
 
-# print("Connected")
+print("Connected")
 
-# data = client_socket.recv(2048)
+data = client_socket.recv(2048)
 
-# print(f"Received: {data.decode('utf-8')}")
+print(f"Received: {data.decode('utf-8')}")
 
-# obs = data.decode('utf-8')
-# print(f"Received: {data}")
+obs = data.decode('utf-8')
+print(obs)
+print(f"Received: {data}")
 
 pygame.init()
 # Set up fonts
@@ -45,12 +46,12 @@ screen = pygame.display.set_mode((constants.SCREEN_WIDTH, constants.SCREEN_HEIGH
 pygame.display.set_caption("Simulation")
 
 # Create a Grid object
-obstacles = [obstacle.Obstacle(screen,Position(50,50, Direction.TOP),1), 
-obstacle.Obstacle(screen,Position(90,90, Direction.BOTTOM),2),
-obstacle.Obstacle(screen,Position(40,180, Direction.BOTTOM),3),
-obstacle.Obstacle(screen,Position(120,150, Direction.RIGHT),4),
-obstacle.Obstacle(screen,Position(150,40, Direction.LEFT),5), 
-obstacle.Obstacle(screen,Position(190,190, Direction.LEFT),6) ]
+#obstacles = [obstacle.Obstacle(screen,Position(50,50, Direction.TOP),1), 
+#obstacle.Obstacle(screen,Position(90,90, Direction.BOTTOM),2),
+#obstacle.Obstacle(screen,Position(40,180, Direction.BOTTOM),3),
+#obstacle.Obstacle(screen,Position(120,150, Direction.RIGHT),4),
+#obstacle.Obstacle(screen,Position(150,40, Direction.LEFT),5), 
+#obstacle.Obstacle(screen,Position(190,190, Direction.LEFT),6) ]
 
 # # Create a Grid object
 # obstacles = [
@@ -97,7 +98,7 @@ obstacle.Obstacle(screen,Position(190,190, Direction.LEFT),6) ]
 
 
 # result = jsonParse.parse_json(obs)
-# obstacles = jsonParse.convert_json(screen, result)
+obstacles = jsonParse.convert_json(screen, obs)
 
 #buttons
 button_list = constants.BUTTON_LIST
@@ -139,7 +140,7 @@ rpi_commands_json = json.dumps(rpi_commands)
 
 print(rpi_commands)
 
-# client_socket.send(rpi_commands_json.encode('utf-8'))
+client_socket.send(rpi_commands_json.encode('utf-8'))
 
 robot.setCurrentPos(0, 0, Direction.TOP)
 

@@ -23,24 +23,54 @@ def parse_json(json_str):
     return None
 
 # convert JSON file to obstacles object using specified format
-def convert_json(screen, json):
-    new_obstacles = []
-    cat, obstacles, mode = json
-    for dict in obstacles:
+import ast
 
-        new_x = dict['x']*10
-        new_y = dict['y']*10
-        if dict['d'] == 0:
-            new_d = Direction.TOP
-        elif dict['d'] == 2:
-            new_d = Direction.RIGHT
-        elif dict['d'] == 4:
-            new_d = Direction.BOTTOM
-        elif dict['d'] == 6:
-            new_d = Direction.LEFT
+def convert_json(screen, obstacle_list_str):
+    # Convert the string representation of the list to an actual list
+    try:
+        obstacle_list = ast.literal_eval(obstacle_list_str)
+    except (ValueError, SyntaxError) as e:
+        raise ValueError(f"Error converting string to list: {str(e)}")
+    
+    new_obstacles = []
+
+    for obstacle_str in obstacle_list:
+        # Strip any unwanted characters and extra spaces
+        obstacle_str = obstacle_str.strip()
         
-        new_obstacles.append(
-            obstacle.Obstacle(screen,Position(new_x,new_y, new_d),dict['id']))
+        # Split the string by commas to get x, y, direction, and id
+        parts = obstacle_str.split(',')
+        
+        # Ensure that we have exactly 4 parts (x, y, direction, id)
+        if len(parts) != 4:
+            raise ValueError(f"Invalid obstacle format: {obstacle_str}")
+        
+        try:
+            # Parse the x, y coordinates and id
+            new_x = int(parts[0].strip()) * 10
+            new_y = int(parts[1].strip()) * 10
+            obstacle_id = parts[3].strip()
+            
+            # Map the direction character to the corresponding Direction enum
+            direction_char = parts[2].strip()
+            if direction_char == 'N':
+                new_d = Direction.TOP
+            elif direction_char == 'E':
+                new_d = Direction.RIGHT
+            elif direction_char == 'S':
+                new_d = Direction.BOTTOM
+            elif direction_char == 'W':
+                new_d = Direction.LEFT
+            else:
+                raise ValueError(f"Unknown direction: {direction_char}")
+            
+            # Create a new Obstacle object and add it to the list
+            new_obstacles.append(
+                obstacle.Obstacle(screen, Position(new_x, new_y, new_d), obstacle_id)
+            )
+        
+        except ValueError as e:
+            raise ValueError(f"Error parsing obstacle: {obstacle_str} - {str(e)}")
     
     return new_obstacles
 
