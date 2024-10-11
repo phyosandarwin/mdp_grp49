@@ -1,0 +1,118 @@
+2024-10-03 23:40:03,174 [DEBUG] RPiServer.image_rec: ============
+2024-10-03 23:40:03,175 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-03 23:40:03,175 [DEBUG] RPiServer.image_rec: Capturing image: captured_image_20241003-234003.jpg
+2024-10-03 23:40:05,513 [DEBUG] RPiServer.image_rec: Image captured at images/captured_image_20241003-234003.jpg
+2024-10-03 23:40:05,840 [DEBUG] RPiServer.image_rec: ============
+2024-10-03 23:40:05,841 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-03 23:40:05,841 [DEBUG] RPiServer.image_rec: Capturing image: captured_image_20241003-234005.jpg
+2024-10-03 23:40:08,139 [DEBUG] RPiServer.image_rec: Image captured at images/captured_image_20241003-234005.jpg
+2024-10-03 23:40:08,434 [DEBUG] RPiServer.image_rec: ============
+2024-10-03 23:40:08,435 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-03 23:40:08,435 [DEBUG] RPiServer.image_rec: Capturing image: captured_image_20241003-234008.jpg
+2024-10-03 23:40:10,785 [DEBUG] RPiServer.image_rec: Image captured at images/captured_image_20241003-234008.jpg
+2024-10-03 23:40:11,164 [DEBUG] RPiServer.image_rec: ============
+2024-10-03 23:40:11,164 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-03 23:40:11,165 [DEBUG] RPiServer.image_rec: Capturing image: captured_image_20241003-234011.jpg
+2024-10-03 23:40:13,525 [DEBUG] RPiServer.image_rec: Image captured at images/captured_image_20241003-234011.jpg
+2024-10-03 23:40:13,828 [DEBUG] RPiServer.image_rec: ============
+2024-10-03 23:40:13,829 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-03 23:40:13,829 [DEBUG] RPiServer.image_rec: Capturing image: captured_image_20241003-234013.jpg
+2024-10-03 23:40:16,193 [DEBUG] RPiServer.image_rec: Image captured at images/captured_image_20241003-234013.jpg
+2024-10-03 23:40:16,496 [DEBUG] RPiServer.image_rec: ============
+2024-10-03 23:40:16,497 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-03 23:40:16,497 [DEBUG] RPiServer.image_rec: Capturing image: captured_image_20241003-234016.jpg
+2024-10-03 23:40:18,867 [DEBUG] RPiServer.image_rec: Image captured at images/captured_image_20241003-234016.jpg
+2024-10-03 23:40:19,180 [DEBUG] RPiServer.image_rec: ============
+2024-10-03 23:40:19,181 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-03 23:40:19,181 [DEBUG] RPiServer.image_rec: Capturing image: captured_image_20241003-234019.jpg
+2024-10-03 23:40:21,538 [DEBUG] RPiServer.image_rec: Image captured at images/captured_image_20241003-234019.jpg
+2024-10-03 23:40:21,838 [DEBUG] RPiServer.image_rec: ============
+2024-10-03 23:40:21,840 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-03 23:40:21,841 [DEBUG] RPiServer.image_rec: Capturing image: captured_image_20241003-234021.jpg
+2024-10-03 23:40:24,181 [DEBUG] RPiServer.image_rec: Image captured at images/captured_image_20241003-234021.jpg
+2024-10-03 23:40:24,478 [DEBUG] RPiServer.image_rec: ============
+2024-10-03 23:40:24,479 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-03 23:40:24,480 [DEBUG] RPiServer.image_rec: Capturing image: captured_image_20241003-234024.jpg
+2024-10-03 23:40:26,848 [DEBUG] RPiServer.image_rec: Image captured at images/captured_image_20241003-234024.jpg
+2024-10-03 23:40:27,121 [DEBUG] RPiServer.image_rec: ============
+2024-10-03 23:40:27,122 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-03 23:40:27,122 [DEBUG] RPiServer.image_rec: Capturing image: captured_image_20241003-234027.jpg
+2024-10-03 23:40:29,496 [DEBUG] RPiServer.image_rec: Image captured at images/captured_image_20241003-234027.jpg
+2024-10-03 23:40:29,794 [DEBUG] RPiServer.image_rec: ============
+2024-10-03 23:40:29,795 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-03 23:40:29,796 [DEBUG] RPiServer.image_rec: Capturing image: captured_image_20241003-234029.jpg
+2024-10-03 23:40:32,164 [DEBUG] RPiServer.image_rec: Image captured at images/captured_image_20241003-234029.jpg
+2024-10-03 23:40:32,466 [DEBUG] RPiServer.image_rec: ============
+2024-10-03 23:40:32,466 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-03 23:40:32,467 [DEBUG] RPiServer.image_rec: Capturing image: captured_image_20241003-234032.jpg
+2024-10-03 23:40:34,805 [DEBUG] RPiServer.image_rec: Image captured at images/captured_image_20241003-234032.jpg
+2024-10-03 23:40:35,105 [DEBUG] RPiServer.image_rec: ============
+2024-10-03 23:40:35,105 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-03 23:40:35,106 [DEBUG] RPiServer.image_rec: Capturing image: captured_image_20241003-234035.jpg
+2024-10-03 23:40:37,476 [DEBUG] RPiServer.image_rec: Image captured at images/captured_image_20241003-234035.jpg
+2024-10-03 23:40:37,748 [DEBUG] RPiServer.image_rec: ============
+2024-10-03 23:40:37,749 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-03 23:40:37,749 [DEBUG] RPiServer.image_rec: Capturing image: captured_image_20241003-234037.jpg
+2024-10-03 23:40:40,118 [DEBUG] RPiServer.image_rec: Image captured at images/captured_image_20241003-234037.jpg
+2024-10-03 23:40:40,436 [DEBUG] RPiServer.image_rec: ============
+2024-10-03 23:40:40,438 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-03 23:40:40,440 [DEBUG] RPiServer.image_rec: Capturing image: captured_image_20241003-234040.jpg
+2024-10-03 23:40:42,781 [DEBUG] RPiServer.image_rec: Image captured at images/captured_image_20241003-234040.jpg
+2024-10-03 23:40:43,090 [DEBUG] RPiServer.image_rec: ============
+2024-10-03 23:40:43,091 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-03 23:40:43,091 [DEBUG] RPiServer.image_rec: Capturing image: captured_image_20241003-234043.jpg
+2024-10-03 23:40:45,416 [DEBUG] RPiServer.image_rec: Image captured at images/captured_image_20241003-234043.jpg
+2024-10-03 23:40:45,702 [DEBUG] RPiServer.image_rec: ============
+2024-10-03 23:40:45,703 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-03 23:40:45,703 [DEBUG] RPiServer.image_rec: Capturing image: captured_image_20241003-234045.jpg
+2024-10-03 23:40:48,020 [DEBUG] RPiServer.image_rec: Image captured at images/captured_image_20241003-234045.jpg
+2024-10-03 23:40:48,303 [DEBUG] RPiServer.image_rec: ============
+2024-10-03 23:40:48,304 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-03 23:40:48,305 [DEBUG] RPiServer.image_rec: Capturing image: captured_image_20241003-234048.jpg
+2024-10-03 23:40:50,664 [DEBUG] RPiServer.image_rec: Image captured at images/captured_image_20241003-234048.jpg
+2024-10-03 23:40:50,991 [DEBUG] RPiServer.image_rec: ============
+2024-10-03 23:40:50,992 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-03 23:40:50,993 [DEBUG] RPiServer.image_rec: Capturing image: captured_image_20241003-234050.jpg
+2024-10-03 23:40:53,333 [DEBUG] RPiServer.image_rec: Image captured at images/captured_image_20241003-234050.jpg
+2024-10-03 23:40:53,743 [DEBUG] RPiServer.image_rec: ============
+2024-10-03 23:40:53,744 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-03 23:40:53,746 [DEBUG] RPiServer.image_rec: Capturing image: captured_image_20241003-234053.jpg
+2024-10-03 23:40:56,102 [DEBUG] RPiServer.image_rec: Image captured at images/captured_image_20241003-234053.jpg
+2024-10-03 23:40:56,480 [DEBUG] RPiServer.image_rec: ============
+2024-10-03 23:40:56,481 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-03 23:40:56,481 [DEBUG] RPiServer.image_rec: Capturing image: captured_image_20241003-234056.jpg
+2024-10-03 23:40:58,833 [DEBUG] RPiServer.image_rec: Image captured at images/captured_image_20241003-234056.jpg
+2024-10-03 23:40:59,151 [DEBUG] RPiServer.image_rec: ============
+2024-10-03 23:40:59,152 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-03 23:40:59,152 [DEBUG] RPiServer.image_rec: Capturing image: captured_image_20241003-234059.jpg
+2024-10-03 23:43:02,659 [DEBUG] RPiServer.image_rec: ============
+2024-10-03 23:43:02,659 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-03 23:43:02,660 [DEBUG] RPiServer.image_rec: Capturing image: captured_image_20241003-234302.jpg
+2024-10-03 23:43:05,004 [DEBUG] RPiServer.image_rec: Image captured at images/captured_image_20241003-234302.jpg
+2024-10-03 23:43:06,452 [DEBUG] RPiServer.image_rec: ============
+2024-10-03 23:43:06,452 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-03 23:43:06,453 [DEBUG] RPiServer.image_rec: Capturing image: captured_image_20241003-234306.jpg

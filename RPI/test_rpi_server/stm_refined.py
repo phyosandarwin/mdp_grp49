@@ -12,7 +12,8 @@ def send_message():
             # cmds = {'commands': 'SF090,RF090,SF120,LF090,SB020,LF090,P___4,SB020,LF090,SB030,RB090,SF030,P___6,SB030,RF090,SF020,LF090,SB010,RB090,LB090,RB090,SF020,P___2,SB040,RF090,P___5,SB020,LF090,SF030,LF090,SF030,RF090,P___3,SB010,LB090,SF010,RF090,P___1'}
             # cmds = {'commands': 'FW050,BW050,ST000,TL070,FW010,RS050'}
             # cmds = {'commands': 'TL050,FW400'}
-            cmds = {'commands': 'FW010,TL050,FW100,RS050,TR050,FW050,RS050,BW050'}
+            # cmds = {'commands': 'FL90,FL90'}
+            cmds = {'commands': 'FR90'}
             # cmds = {'commands': 'FW200,ST000'}
             # Create a queue
             command_queue = queue.Queue()
@@ -26,7 +27,7 @@ def send_message():
                 print(f"Sent: {message}")
 
             
-                time.sleep(3)
+                time.sleep(5)
                 response = ser.readline().decode('utf-8').strip()
                 if response:
                     print(f"Received: {response}")

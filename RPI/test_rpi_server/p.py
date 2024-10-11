@@ -2,8 +2,8 @@
 def process_strings(strings):
     # Define specific replacements
     special_replacements = {
-        'SB': 'BW',
-        'SF': 'FW'
+        'SB': 'B',
+        'SF': 'F'
     }
 
     # Function to process each string
@@ -19,7 +19,7 @@ def process_strings(strings):
         if 'P_' not in s:
             # Flip the first two letters if no 'P_' in the string
             if len(s) > 1:
-                return s[1] + s[0] + s[2:]
+                return s[1] + s[0] + s[3:]
             else:
                 return s  # If single character or empty, return as is
 

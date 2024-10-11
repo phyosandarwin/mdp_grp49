@@ -18,7 +18,7 @@ def get_master_ip():
         if ip_match:
             return ip_match.group(1)
     
-    return None
+    return "10.96.49.30"#hardcode first
 
 # # Get and print the RCZ IP address
 # if rcz_ip:

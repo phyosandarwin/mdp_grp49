@@ -3,18 +3,20 @@ import time
 import threading
 
 class STM_Controller(threading.Thread):
-    def __init__(self, port, baud_rate, pause_queue, pause_done_event, timeout=1):
+    def __init__(self, port, baud_rate, pause_queue, pause_done_event, stm_to_rpi_queue,timeout=1):
         super().__init__()
         self.serial_port = port
         self.baud_rate = baud_rate
         self.timeout = timeout
         self.command_queue = queue.Queue()
         self.ser = None
+        self.stm_buffer_time =5#pause between each instrution sent
         self.mock = False  # Start with real mode, switch to mock if connection fails
-        self.leeway = 5  # Buffer time for inference of object
         self.pause_queue = pause_queue  # Queue to send pause signals
         self.pause_done_event = pause_done_event  # Event to wait for pause completion
         self.running = True  # Control the thread's running state
+        self.pause_time = 10#sit still to take pic
+        self.stm_to_rpi_queue = stm_to_rpi_queue
 
     def connect(self):
         """Establish a serial connection to the robot or switch to mock mode if connection fails."""
@@ -41,11 +43,13 @@ class STM_Controller(threading.Thread):
         self.command_queue.put(command)
         print(f"Command added: {command}")
 
-    def add_commands(self, commands):
+    def add_commands(self, commands , send_coords):
         """Add multiple commands to the queue."""
         if isinstance(commands, list):  # Ensure commands is a list
-            for command in commands:
+            for i,command in enumerate(commands):
                 self.add_command(command)
+                self.stm_to_rpi_queue.put(send_coords[i])
+                
         else:
             print("Error: add_commands expects a list of commands.")
 
@@ -64,25 +68,27 @@ class STM_Controller(threading.Thread):
         if message.startswith('P_'):  # Pause command
             try:
                 # Extract the pause time; assuming format 'P___<number>'
-                pause_time_str = ''.join(filter(str.isdigit, message))
-                pause_time = int(pause_time_str) if pause_time_str else 1  # Default to 1 second if not specified
+                obj_id_str = ''.join(filter(str.isdigit, message))
+                obj_id_int= int(obj_id_str)
             except ValueError:
                 pause_time = 1
-                print(f"Invalid pause time in command '{message}'. Defaulting to {pause_time} second.")
+                print(f"[MOCK_STM.py]Invalid  command {message}")
 
-            print(f"Pause command detected: {message}. Signaling main server to pause for {pause_time} seconds.")
+            print(f"Pause command detected: {message}. Signaling main server to pause for OBJECT {obj_id_int}")
             # Send the pause time to the main server via the pause_queue
-            self.pause_queue.put(pause_time)
+            self.pause_queue.put(obj_id_int)
             # Wait until the main server signals that pause is done
             self.pause_done_event.wait()
             self.pause_done_event.clear()
-            print(f"Pause of {pause_time} seconds completed. Resuming command execution.")
+            print(f"Pause for OBJECT {obj_id_int}. Resuming command execution.")
             return  # Exit after handling pause
 
         if self.mock:
             print(f"[Mock Mode] Sent: {message}")
+            self.stm_to_rpi_queue.put(message)
             # Simulate a response
             response = f"[Mock Mode] Response to {message}"
+            # time.sleep(self.stm_buffer_time)
             print(f"[Mock Mode] Received: {response}")
         else:
             try:
@@ -90,7 +96,10 @@ class STM_Controller(threading.Thread):
                 print(f"Sent: {message}")
 
                 # Wait for a response with a short delay
-                time.sleep(0.5)  # Reduced sleep time for faster responses
+                time.sleep(self.stm_buffer_time)  
+
+                #send to android here
+                
                 response = self.ser.readline().decode('utf-8').strip()
                 if response:
                     print(f"Received: {response}")
@@ -111,6 +120,7 @@ class STM_Controller(threading.Thread):
         self.connect()
         while self.running:
             self.send_next_command()
+            
             # Optional: Add a small delay to prevent tight loop
             time.sleep(0.1)
         # self.disconnect()
@@ -154,15 +164,6 @@ if __name__ == "__main__":
     # Start the STM_Controller thread
     controller_thread.start()
 
-    # Define the commands you want to send as an array of strings
-    # commands = [
-    #     'FW090', 'FR090', 'FW120', 'FL090', 'BW020', 'FL090', 'P___4',
-    #     'BW020', 'FL090', 'BW030', 'BR090', 'FW030', 'P___6', 'BW030',
-    #     'FR090', 'FW020', 'FL090', 'BW010', 'BR090', 'BL090', 'BR090',
-    #     'FW020', 'P___2', 'BW040', 'FR090', 'P___5', 'BW020', 'FL090',
-    #     'FW030', 'FL090', 'FW030', 'FR090', 'P___3', 'BW010', 'BL090',
-    #     'FW010', 'FR090', 'P___1'
-    # ]
     commands = [
         'FW090', 'FR090', 'FW120', 'FL090', 'BW020', 'FL090', 'P___4',
     ]

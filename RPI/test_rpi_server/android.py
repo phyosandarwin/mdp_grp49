@@ -18,10 +18,11 @@ class BluetoothComm:
         
 
         #android
-        self.stop_image_rec = False#by default stopImageRec
+        self.stop_image_rec = True#by default stopImageRec
         self.android_info = None
         self.whichTask = ''
         self.start_time = None
+        self.test_chat = False#flag set to false,then on top rpi_server will see this and use android.py send_message to send
         #handle retry,so if want start again,need clear coordinates:android_info
 
 
@@ -53,7 +54,6 @@ class BluetoothComm:
         except Exception as e:
             print(f"Error while sending: {e}")
             self.stop_event.set()
-
     def get_most_recent_image(self):
         try:
             files = [os.path.join(self.image_folder, f) for f in os.listdir(self.image_folder) if os.path.isfile(os.path.join(self.image_folder, f))]
@@ -96,7 +96,7 @@ class BluetoothComm:
                         print(f'decoded data =={decoded_data}')
                         self.decide_data(decoded_data)     
                         print(f"Received: {self.android_info}")
-
+                        
                         if decoded_data == 'stop49':
                             print('supposed to stop bluetooth connection')
                             self.stop_event.set()  # Signal both threads to stop
@@ -106,6 +106,17 @@ class BluetoothComm:
                         elif decoded_data.strip() == 'startRec':
                             self.send_message('starting image rec..')
                             self.stop_image_rec = False
+                        elif decoded_data.strip() == 'startChat':
+                             self.test_chat = True
+                             self.stop_image_rec = True#stop image_rec for cleaner terminal
+                        elif decoded_data.strip() == 'stopChat':
+                             print("stopping chat")
+                             self.test_chat = False
+                             self.stop_image_rec = False#stop image_rec for cleaner terminal
+                        elif decoded_data.strip() == 'stopTask':
+                            pass
+                        
+
                 else:
                     pass
         
@@ -115,6 +126,7 @@ class BluetoothComm:
                 print(f"Error while receiving: {e}")
                 self.stop_event.set()#notify other threads
                 break
+    
     def start(self):
         retry_delay = 5  
 

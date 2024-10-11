@@ -13,14 +13,17 @@ import queue
 import logging
 import sys
 import socket
+from algo_handler import AlgoHandler
+import json
 
+os.makedirs('logs', exist_ok=True)
 # Configure logging
 logging.basicConfig(
     level=logging.DEBUG,  # Set to DEBUG to capture all levels of log messages
     format='%(asctime)s [%(levelname)s] %(name)s: %(message)s',
     handlers=[
-        logging.FileHandler("rpi_server.log"),  # Log to a file
-        logging.StreamHandler(sys.stdout)       # Also log to the console
+        logging.FileHandler("./logs/rpi_server.log"),  # Log to a file
+        # logging.StreamHandler(sys.stdout)       # Also log to the console
     ]
 )
 
@@ -34,6 +37,10 @@ class RPiServer:
         self.captured_image_wait = captured_image_wait
         self.movement_enabled = True # control robot movement
 
+        self.stop_event = threading.Event()
+        self.stm_to_rpi_queue = queue.Queue()#queue to notify andorid of the commands sent
+
+        self.clear_log_files()
 
         # Initialize communication queues and events
         self.pause_queue = queue.Queue()
@@ -51,15 +58,6 @@ class RPiServer:
             self.camera = None
             self.camera_initialized = False
             self.logger.error(f"Failed to initialize camera: {e}")
-
-        # # Initialize STM communication
-        # self.stm_comm = STM_Controller(
-        #     port='/dev/ttyUSB0',
-        #     baud_rate=115200,
-        #     pause_queue=self.pause_queue,
-        #     pause_done_event=self.pause_done_event
-        # )
-        # self.stm_comm.start()  # Start the STM_Controller thread
         # Initialize Bluetooth communication
         self.bt_comm = BluetoothComm()
 
@@ -67,38 +65,85 @@ class RPiServer:
         self.master_ip_address = get_master_ip()
         self.predict_url = f"http://{self.master_ip_address}:5055/predict"
 
-        # self.algo_url = f"http://{self.master_ip_address}:5055/algo"
-        self.algo_url = f"http://10.91.55.46:8001/"
+        self.algo_url = f"http://{self.master_ip_address}:5055/algo"#just for testing sending
+
 
         self.retry_delay=Config.RETRY_DELAY
         self.retry_send_max=Config.RETRY_SEND_MAX
 
         #tasks
         self.task_finshed = False
-
         # self.pause_handler_thread = threading.Thread(target=self.pause_handler, daemon=True)
         # self.pause_handler_thread.start()
         self.stm_comm = None
         self.pause_handler_thread = None
 
-    def test_algo(self):
-        SERVER_IP   = '10.96.49.24'
-        PORT_NUMBER = 8001
-        client_socket = socket(AF_INET, SOCK_DGRAM )
-        client_socket.connect( (SERVER_IP, PORT_NUMBER) )
+        # Initialize algo handler
+        self.algo_handler = AlgoHandler()
         
-        client_socket.sendto('cool',(SERVER_IP,PORT_NUMBER))
+        # Start the AlgoHandler server in a separate thread and store it as an instance variable
+        self.algo_thread = threading.Thread(target=self.algo_handler.start_server, daemon=True)
+        self.algo_thread.start()
+        self.logger.info("AlgoHandler server thread started.")
+
+        # Create separate logger for image_rec()
+        self.image_rec_logger = logging.getLogger(f"{self.__class__.__name__}.image_rec")
+        self.image_rec_logger.setLevel(logging.DEBUG)
+        image_rec_handler = logging.FileHandler("./logs/image_rec.log")
+        image_rec_formatter = logging.Formatter('%(asctime)s [%(levelname)s] %(name)s: %(message)s')
+        image_rec_handler.setFormatter(image_rec_formatter)
+        self.image_rec_logger.addHandler(image_rec_handler)
+        self.image_rec_logger.propagate = False  # Prevent logging from propagating to the main logger
+
+        # Create separate logger for task_1()
+        self.task1_logger = logging.getLogger(f"{self.__class__.__name__}.task1")
+        self.task1_logger.setLevel(logging.DEBUG)
+        task1_handler = logging.FileHandler("./logs/task1.log")
+        task1_formatter = logging.Formatter('%(asctime)s [%(levelname)s] %(name)s: %(message)s')
+        task1_handler.setFormatter(task1_formatter)
+        self.task1_logger.addHandler(task1_handler)
+        self.task1_logger.propagate = False  # Prevent logging from propagating to the main logger
+    def clear_log_files(self):
+        """Clear the contents of all log files during initialization."""
+        log_files = [
+            "./logs/rpi_server.log",
+            "./logs/image_rec.log",
+            "./logs/task1.log"
+        ]
+        
+        for log_file in log_files:
+            try:
+                # Truncate the file (clear contents)
+                open(log_file, 'w').close()
+                print(f"Cleared log file: {log_file}")
+            except FileNotFoundError:
+                print(f"Log file not found, skipping: {log_file}")
+    def monitor_stm_queue(self):
+        while not self.stop_event.is_set():
+            try:
+                message = self.stm_to_rpi_queue.get(timeout=1)
+                print('THREAD FOR SENDING MSG TO ANDROID')
+                print(f"Received from STM: {message}")
+                # Process the message as needed
+                # For example, send it to Android via Bluetooth
+                # self.bt_comm.send_message(message)
+            except queue.Empty:
+                # No message received in this interval
+                pass
+        print("monitor_stm_queue thread exiting.")
         
     def pause_handler(self):
-        """Handle pause signals from STM_Controller by executing image_rec."""
-        while True:
+        while not self.stop_event.is_set():
             try:
+                pause_time = self.stm_comm.pause_time
                 # Wait for a pause time to be available
-                pause_time = self.pause_queue.get(timeout=1)  
-                print(f"[Pause Handler] Received pause time: {pause_time} seconds.")
-                
+                obj_id_int = self.pause_queue.get(timeout=1)  
+                print(f"[Pause Handler][RPI_SERVER] || OBJECT : {obj_id_int} for {pause_time}")
+                self.bt_comm.stop_image_rec=False
                 # Execute image_rec
-                self.image_rec()
+                self.image_rec(obj_id_int)
+                self.bt_comm.stop_image_rec=True
+                print("[Pause Handler]setting self.bt_comm.stop_image_rec back to True")
                 
                 # Signal that the pause is done
                 self.pause_done_event.set()
@@ -107,6 +152,7 @@ class RPiServer:
                 # No pause signal received, continue
                 if not self.stm_comm.is_alive() and self.pause_queue.empty():
                     break
+        print("pause_handler thread exiting.")
 
     def maintain_recent_images(self, folder):
         """Maintain a maximum of self.max_images in the folder by removing the oldest ones."""
@@ -114,10 +160,9 @@ class RPiServer:
         if len(images) > self.max_images:
             for image in images[:-self.max_images]:
                 os.remove(os.path.join(folder, image))
-                print(f"Removed {image} from {folder}")
-
-    def send_image_to_server(self, filename, mock=False):
-        """Send the image to the server and handle the response."""
+                # print(f"Removed {image} from {folder}")
+                self.image_rec_logger.debug(f"Removed {image} from {folder}")
+    def send_image_to_server(self, filename, mock=False,obj_id_int=None):
         retry_times = 0
 
         while retry_times < self.retry_send_max:
@@ -131,52 +176,64 @@ class RPiServer:
                         'confidence': [],
                         'class_name': 'MockClass'
                     }
-                    self.process_server_response(mock_response, filename)
+                    self.process_server_response(mock_response, filename, obj_id_int)
                     break  # Exit loop if successful
                 else:
                     with open(filename, 'rb') as img_file:
-                        print(f"sending to {self.predict_url}")
+                        # Example of the additional JSON payload
+                        payload = {
+                            'request_id': obj_id_int,  # Replace with actual data if needed
+                            'additional_info': 'Sample information'  # Example JSON body
+                        }
+
+                        # Log that the request is being sent
+                        self.image_rec_logger.debug(f"sending to {self.predict_url}")
+
+                        # Sending both the image file and the JSON payload
                         files = {'file': img_file}
-                        response = requests.post(self.predict_url, files=files)
+                        # Flatten the JSON data for the form-data structure
+                        data = {key: str(value) for key, value in payload.items()}
+
+                        response = requests.post(self.predict_url, files=files, data=data)
 
                         if response.status_code == 200:
                             json_response = response.json()
-                            self.process_server_response(json_response, filename)
+                            self.process_server_response(json_response, filename , obj_id_int)
                             break  # Exit loop if successful
-
                         else:
                             print(f"Failed to send image. Status code: {response.status_code}. Retrying in {self.retry_delay} seconds...")
 
             except requests.ConnectionError:
+                response = requests.post(f"http://{self.master_ip_address}:5055/status")
+                print("response from flask",response)
                 print(f"Connection error occurred while sending {filename}. Retrying in {self.retry_delay} seconds... {retry_times}/{self.retry_send_max}")
 
             time.sleep(self.retry_delay)
 
 
-    def process_server_response(self, json_response, filename):
+    def process_server_response(self, json_response, filename,obj_id_int=None):
         """Process the server response and send relevant information via Bluetooth."""
         if 'boxes' in json_response and 'confidence' in json_response:
             #
             result_conf = json_response['confidence']
-            print(f"Image {filename} successfully sent to {self.predict_url}")
-            print("Bounding Boxes:", json_response['boxes'])
-            print("Confidence Scores:", result_conf)
+            # print(f"Image {filename} successfully sent to {self.predict_url}")
+            # print("Bounding Boxes:", json_response['boxes'])
+            # print("Confidence Scores:", result_conf)
+            self.image_rec_logger.debug(f"Image {filename} successfully sent to {self.predict_url}")
+            self.image_rec_logger.debug(f"Bounding Boxes:{json_response['boxes']}")
+            self.image_rec_logger.debug(f"Confidence Scores:{result_conf}")
 
             if 'class_name' in json_response:  # Send only when class name is identified
                 result_class_name = json_response['class_name']
-                print(f"class name = {result_class_name}")
-                result_send = f'IMG-1-{result_class_name}'#unhardcode this
+                # print(f"class name = {result_class_name}")
+                result_send = f'IMG-{obj_id_int}-{result_class_name}'#unhardcode this
+                self.image_rec_logger.debug("unhardcode this in the future")
+                self.image_rec_logger.debug(result_send)
                 self.bt_comm.send_message(result_send)
-
-        # if 'encoded_image' in json_response:
-        #     name_of_file = os.path.basename(filename)
-        #     decoded_filename = os.path.join(self.results_folder, f"{name_of_file}")
-        #     image_bytes = json_response['encoded_image']
-        #     decode_image(image_bytes, decoded_filename)
-        #     self.maintain_recent_images(self.results_folder)
         else:
-            print(f"Plain Image {filename}successfully sent, but 'boxes' or 'confidence' not found in the response.")
-
+            # print(f"Plain Image {filename}successfully sent, but 'boxes' or 'confidence' not found in the response.")
+            self.image_rec_logger.debug(f"Plain Image {filename}successfully sent, but 'boxes' or 'confidence' not found in the response.")
+            self.bt_comm.send_message(f"image taken no bounding boxes found for {obj_id_int}")
     def start_bluetooth(self):
         """Start Bluetooth communication in a separate thread."""
         bluetooth_thread = threading.Thread(target=self.bt_comm.start)
@@ -191,16 +248,21 @@ class RPiServer:
             self.bluetooth_thread.join()  # Wait for the Bluetooth thread to finish
             print("Bluetooth thread stopped.")
     
-    def image_rec(self):
+    def image_rec(self,obj_id_int=None):
         """Handle image capture and recognition."""
         print('============')
         print('IMG RECOGNITION\n')
 
+        self.image_rec_logger.debug('============')
+        self.image_rec_logger.debug('IMG RECOGNITION\n')
+
         # Check if camera is initialized
         if self.camera_initialized and self.camera is not None:
             # Generate the filename for the captured image
-            filename = f"captured_image_{time.strftime('%Y%m%d-%H%M%S')}.jpg"
-            print(f"Capturing image: {filename}")
+            filename = f"obj_{obj_id_int}_{time.strftime('%H%M%S')}.jpg"
+            # print(f"Capturing image: {filename}")
+            self.image_rec_logger.debug(f"Capturing image: {filename}")
+            self.bt_comm.send_message(f"image taken for {obj_id_int}")
 
             # Check if image recognition is paused
             if not self.bt_comm.stop_image_rec:
@@ -208,35 +270,38 @@ class RPiServer:
                     # Capture image
                     filepath = self.camera.take_picture(filename)
                     print(f"Image captured at {filepath}")
+                    self.image_rec_logger.debug(f"Image captured at {filepath}")
 
                     # Maintain a fixed number of recent images
                     self.maintain_recent_images(self.image_folder)
 
                     # Send the image to the server
-                    self.send_image_to_server(filepath)
+                    self.send_image_to_server(filepath,mock=False,obj_id_int = obj_id_int)
                 except Exception as e:
-                    print(f"Error during image capture: {e}")
+                    print(f"Error during image capture: {e} {self.master_ip_address}")
+                    self.image_rec_logger.error(f"Error during image capture: {e}")
             else:
                 print('Image recognition paused...(send startRec on Android to start)')
+                self.image_rec_logger.info('Image recognition paused...(send startRec on Android to start)')
         else:
             # Mock run when camera is not initialized
+            self.image_rec_logger.info('Camera not initialized. Performing mock image recognition.')
             print('Camera not initialized. Performing mock image recognition.')
 
             # Simulate image capture
             mock_filename = "mock_captured_image.jpg"
             mock_filepath = os.path.join(self.image_folder, mock_filename)
             print(f"Simulating image capture: {mock_filepath}")
+            self.image_rec_logger.debug(f"Simulating image capture: {mock_filepath}")
 
             # Maintain a fixed number of recent images
             self.maintain_recent_images(self.image_folder)
 
             # Simulate sending image to server
-            self.send_image_to_server(mock_filepath, mock=True)
+            self.send_image_to_server(mock_filepath, mock=True,obj_id_int = obj_id_int)
 
             # Optionally, simulate waiting time
             time.sleep(self.captured_image_wait)
-
-        print('============')
     def process_android_data_for_algo(self,android_data,category="category",mode="0"):
         processed_data = []
 
@@ -264,18 +329,19 @@ class RPiServer:
             "mode":mode
         }
         return payload
-    def start_stm(self,commands):
+    def start_stm(self,commands,send_coords):
         # Initialize STM communication
         self.stm_comm = STM_Controller(
             port='/dev/ttyUSB0',
             baud_rate=115200,
             pause_queue=self.pause_queue,
-            pause_done_event=self.pause_done_event
+            pause_done_event=self.pause_done_event,
+            stm_to_rpi_queue=self.stm_to_rpi_queue 
         )
         self.stm_comm.start()  # Start the STM_Controller thread
         print("STM_Controller thread started.")
 
-        self.stm_comm.add_commands(commands)
+        self.stm_comm.add_commands(commands,send_coords)
 
         self.pause_handler_thread = threading.Thread(target=self.pause_handler, daemon=True)
         self.pause_handler_thread.start()
@@ -287,24 +353,104 @@ class RPiServer:
         # Now, join the STM_Controller thread to ensure it has finished processing commands
         self.stm_comm.join()
         print("STM_Controller thread completed.")   
-
+    
     def task_1(self):
         print('task 1 start...setting task_finish to false')
         self.task_finshed = False
         android_data = self.bt_comm.android_info
-        processed_android_data = self.process_android_data_for_algo(android_data)
-        print('Android:',processed_android_data)
-        self.logger.info(f"processed_android_data sent to algo :{processed_android_data} at {self.algo_url}")
-        response_algo = requests.post(self.algo_url, json={"data": android_data})
-        #use algo send to stm
-        robot_commands = response_algo.json()['commands']#just take the 'commands key
-        formatted_cmds  = process_strings(robot_commands.split(','))
+        self.task1_logger.debug(f'Android data: {android_data}')
+        # processed_android_data = self.process_android_data_for_algo(android_data)
+        print('Android:',android_data,type(android_data[0]))
+        for i in range(len(android_data)):
+            first = android_data[i].split(",")
+            first[0] = str(int(first[0])-1)
+            first[1] = str(int(first[1])-1)
+            android_data[i] = ",".join(first)
+
+        print('Android:',android_data)
+        # android_data_str = """{}""".format("\n".join(android_data))
+        # print(android_data_str)
+        # self.task1_logger.debug(f'Android data string:\n{android_data_str}')
+    
+        # #just for testing sending of messages
+        # response_algo = requests.post(self.algo_url, json={"data": android_data})
+        # robot_commands = response_algo.json()['commands']#just take the 'commands key
+        # formatted_cmds  = process_strings(robot_commands.split(','))
         
+        # # print(f"response from algo{formatted_cmds}")
+        # self.logger.info(f"response from algo{formatted_cmds}")
+
+        # print('===running stm=====')
+        # self.start_stm(formatted_cmds)
+        if self.algo_handler.conn:
+            pass
+
+        #hardcode here first try
+        # message = """{"cat":"obstacles","value":{"obstacles":[{"x":7,"y":14,"id":1,"d":0},{"x":15,"y":8,"id":2,"d":6},{"x":4,"y":3,"id":3,"d":2},{"x":9,"y":7,"id":4,"d":4}],"mode":"0"}}"""
+        #dont proceed until connected to algo computer
+        while not self.algo_handler.conn:
+            print(f"CONNECT TO ALGO COMPUTER server ip:{self.algo_handler.host}/{self.algo_handler.port}")
+            self.task1_logger.debug("Waiting for AlgoHandler to connect.")
+            # print("change port:")
+            # new_port = input("new_port:")
+            # self.algo_handler.port = new_port
+            time.sleep(10)
+            
+        message = android_data
+        try:
+            print(type(message))
+        except Exception as e:
+            print(e)
+        self.algo_handler.send_external_message(message)
+        self.task1_logger.debug(f"Sent message to AlgoHandler: {message}")
+        print(f"Sent message to AlgoHandler: {message}")
+
+        # Receive a message
+        received_message = self.algo_handler.receive_message()
+        self.image_rec_logger.debug(received_message)
+
+        # Handle the received message
+        while not received_message:
+            print('waiting for response from algo')
+            time.sleep(5)#give some buffer for algo to compute
+            received_message = self.algo_handler.receive_message()
+            time.sleep(3)
+            self.algo_handler.send_external_message(message)
+        
+        try:
+            received_data = json.loads(received_message)
+            print("Parsed received data:", received_data)
+
+            self.task1_logger.debug(f"Parsed received data: {received_data}")
+        except json.JSONDecodeError:
+            print("Error decoding received JSON.")
+            self.task1_logger.error("Error decoding received JSON.")
+
+        # Close the connection after communication
+        # self.algo_handler.close_connection()
+
+        # response_algo = requests.post(self.algo_url, json={"data": android_data})
+        #use algo send to stm
+        # robot_commands = response_algo.json()['commands']#just take the 'commands key
+        robot_commands = received_data['value']['commands']
+        car_coords = received_data['value']['coords']
+        print("======")
+        print(car_coords)
+        send_coords = []
+        print(self.stm_to_rpi_queue)
+        for coord in car_coords:
+            # self.bt_comm.send_message(",".join(car_coords[i]))
+            send = "UPDATE-" + str(int(coord[0]/10)+1) +  '-' + str(int(coord[1]/10)+1) +  '-' + coord[2]
+            self.bt_comm.send_message(send)
+            send_coords.append(send)
+            time.sleep(1)
+            
+        formatted_cmds  = process_strings(robot_commands.split(','))
         print(f"response from algo{formatted_cmds}")
         self.logger.info(f"response from algo{formatted_cmds}")
 
         print('===running stm=====')
-        self.start_stm(formatted_cmds)
+        self.start_stm(formatted_cmds,send_coords)
 
         #send message here to android to tell it now then start the clock
         # while True:
@@ -316,7 +462,7 @@ class RPiServer:
 
         end= time.time()
         duration = end - self.bt_comm.start_time
-
+        self.bt_comm.send_message('ENDED')
         print(f'task 1 finished in {duration}')#got some delay from the moment it receives start to this point
         self.bt_comm.whichTask = ''
         self.android_info = None
@@ -338,10 +484,15 @@ class RPiServer:
         print(f'Master IP address: {self.master_ip_address}')
         print(f'Sending images to {self.predict_url}')
 
+        # Start monitoring STM to RPi queue
+        print("staring STM_TO_RPI QUEUE THREAD")
+        self.stm_monitor_thread = threading.Thread(target=self.monitor_stm_queue, daemon=True)
+        self.stm_monitor_thread.start()
+
         self.start_bluetooth()
 
         try:
-            while True:
+            while not self.stop_event.is_set():
                 if not self.camera_initialized:
                     print('Camera not connected. Connect Camera to RPI...')
                 if not self.bt_comm.isconnected:
@@ -356,12 +507,22 @@ class RPiServer:
                         #send to PC server
                         self.task_1()
                         print('waiting for next instruction(task 1 or task 2)...')
-                    if self.bt_comm.whichTask == 'task2':
+                    elif self.bt_comm.whichTask == 'task2':
                         self.task_2()
                         print('waiting for next instruction(task 1 or task 2)...')
                     elif not self.bt_comm.stop_image_rec:
-                        print('waiting for start signal from android')
+                        # print('waiting for start signal from android')
                         self.image_rec()
+                        time.sleep(5)
+                    
+                    elif self.bt_comm.stop_image_rec and self.bt_comm.test_chat:
+                        print("===CHAT ENABLED===")
+                        msg_to_android = input("Enter message:")
+                        self.bt_comm.send_message(msg_to_android)
+            
+
+                    
+                    
                    
                     
                 # If Bluetooth gets disconnected, loop back to check for connection
@@ -369,10 +530,18 @@ class RPiServer:
 
         except KeyboardInterrupt:
             print("Shutting down RPiServer...")
+            self.stop_event.set()
             self.bt_comm.forcestop=True#so stop retrying connection in start()
 
         finally:
-          
+            self.algo_handler.stop_server()   # Signal the AlgoHandler to stop
+
+            # Close AlgoHandler connection
+            if self.algo_thread.is_alive():
+                self.algo_thread.join()  # Wait for the AlgoHandler thread to finish
+                print("AlgoHandler thread stopped.")
+            
+            
             self.stop_bluetooth()
             if self.camera_initialized:
                 self.camera.close()
@@ -382,6 +551,8 @@ class RPiServer:
                 self.stm_comm.join()
             # Wait for the pause_handler thread to finish
                 self.pause_handler_thread.join()
+            if self.stm_monitor_thread:
+                self.stm_monitor_thread.join()
             print("RPiServer stopped.")
 
 

@@ -6,8 +6,10 @@ class Config:
     IMAGE_FOLDER = 'images'
     RESULTS_FOLDER = 'image_results'
 
+
+
     # Limits and intervals
-    MAX_IMAGES = 3
+    MAX_IMAGES = 10
     CAPTURED_IMAGE_WAIT = 5  # in seconds
 
     # Server details
@@ -16,7 +18,9 @@ class Config:
     RETRY_DELAY = 2  
     RETRY_SEND_MAX = 5
 
-    # Bluetooth settings
-    STOP_IMAGE_REC = False
+    ALGO_PORT_NUMBER = 8007
+
+    # # Bluetooth settings
+    # STOP_IMAGE_REC = False
 
 

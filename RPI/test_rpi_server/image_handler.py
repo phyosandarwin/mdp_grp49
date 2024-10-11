@@ -29,7 +29,7 @@ class CameraHandler:
             
             # Capture the image
             self.camera.capture(filepath)
-            print(f"Image saved as {filepath}")
+            # print(f"Image saved as {filepath}")
             
             return filepath 
         finally:
