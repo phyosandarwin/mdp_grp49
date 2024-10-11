@@ -18,24 +18,24 @@ import json
 # Send the Commands to RPI
 # RPI Connection
 # Configure the client
-server_ip = "192.168.31.31"  # Replace with your PC's IP address
-server_port = 8001  # Use the same port number as on your PC
+server_ip = "10.96.49.1"  # Replace with your PC's IP address
+server_port = 8007  # Use the same port number as on your PC
 
 # # Create a socket
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-# # Connect to the server
-# print("Waiting to Connect to RPI")
-# client_socket.connect((server_ip, server_port))
+# Connect to the server
+print("Waiting to Connect to RPI")
+client_socket.connect((server_ip, server_port))
 
-# print("Connected")
+print("Connected")
 
-# data = client_socket.recv(2048)
+data = client_socket.recv(2048)
 
-# print(f"Received: {data.decode('utf-8')}")
+print(f"Received: {data.decode('utf-8')}")
 
-# obs = data.decode('utf-8')
-# print(f"Received: {data}")
+obs = data.decode("utf-8")
+print(f"Received: {data}")
 
 pygame.init()
 # Set up fonts
@@ -101,7 +101,7 @@ obstacles = [
 
 
 # result = jsonParse.parse_json(obs)
-# obstacles = jsonParse.convert_json(screen, result)
+obstacles = jsonParse.convert_json(screen, obs)
 
 # buttons
 button_list = constants.BUTTON_LIST
@@ -225,7 +225,7 @@ def add_coords(command, dir):
     return (x, y, dir)
 
 
-coords = {"coords": []}
+coords = []
 x, y, dir = 0, 0, 0
 for command in commands_str.split(","):
     _x, _y, dir = add_coords(command, dir)
@@ -235,27 +235,27 @@ for command in commands_str.split(","):
     y_ = y
     dir_ = ""
     if dir == 0:
-        y_ += 30
+        y_ += 20
         dir_ = "N"
     elif dir == 1:
-        x_ += 30
-        y_ += 30
+        x_ += 20
+        y_ += 20
         dir_ = "E"
     elif dir == 2:
-        x_ += 30
+        x_ += 20
         dir_ = "S"
-    elif dir == 30:
+    elif dir == 3:
         dir_ = "W"
-    coords["coords"].append((x_, y_, dir_))
+    coords.append((x_, y_, dir_))
 
 print(coords)
 
+rpi_commands["value"]["coords"] = coords
 rpi_commands_json = json.dumps(rpi_commands)
 
 print(rpi_commands)
 
-# client_socket.send(rpi_commands_json.encode('utf-8'))
-# client_socket.send(coords_json.encode("utf-8"))
+client_socket.send(rpi_commands_json.encode("utf-8"))
 
 robot.setCurrentPos(0, 0, Direction.TOP)
 
