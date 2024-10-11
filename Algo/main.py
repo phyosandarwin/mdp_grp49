@@ -228,11 +228,25 @@ def add_coords(command, dir):
 coords = {"coords": []}
 x, y, dir = 0, 0, 0
 for command in commands_str.split(","):
-    _x, _y, _dir = add_coords(command, dir)
+    _x, _y, dir = add_coords(command, dir)
     x += _x
     y += _y
-    dir = _dir
-    coords["coords"].append((x, y, dir))
+    x_ = x
+    y_ = y
+    dir_ = ""
+    if dir == 0:
+        y_ += 30
+        dir_ = "N"
+    elif dir == 1:
+        x_ += 30
+        y_ += 30
+        dir_ = "E"
+    elif dir == 2:
+        x_ += 30
+        dir_ = "S"
+    elif dir == 30:
+        dir_ = "W"
+    coords["coords"].append((x_, y_, dir_))
 
 print(coords)
 
