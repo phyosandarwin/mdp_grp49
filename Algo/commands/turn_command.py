@@ -3,6 +3,7 @@ from robot.turn_type import TurnType
 from robot.direction import Direction
 from robot.position import Position, RobotPosition
 
+
 class TurnCommand(Command):
     SMALL_TURN_TIME = 10
     MEDIUM_TURN_TIME = 20
@@ -12,7 +13,7 @@ class TurnCommand(Command):
         turn_time = {
             TurnType.SMALL: TurnCommand.SMALL_TURN_TIME,
             TurnType.MEDIUM: TurnCommand.MEDIUM_TURN_TIME,
-            TurnType.LARGE: TurnCommand.LARGE_TURN_TIME
+            TurnType.LARGE: TurnCommand.LARGE_TURN_TIME,
         }
         super().__init__(turn_time[type_of_turn])
         self.type_of_turn = type_of_turn
@@ -31,134 +32,136 @@ class TurnCommand(Command):
         robot.turn(self.type_of_turn, self.left, self.right, self.reverse)
 
     def move(self, curr_pos: Position):
-        assert isinstance(curr_pos, RobotPosition), "Cannot apply turn command on non-robot positions!"
+        assert isinstance(
+            curr_pos, RobotPosition
+        ), "Cannot apply turn command on non-robot positions!"
 
         if self.left and not self.right and not self.reverse:
             if self.type_of_turn == TurnType.SMALL:
                 if curr_pos.direction == Direction.TOP:
-                    curr_pos.x -= 10
+                    curr_pos.x -= 40
                     curr_pos.y += 40
                 elif curr_pos.direction == Direction.LEFT:
                     curr_pos.x -= 40
-                    curr_pos.y -= 10
+                    curr_pos.y -= 40
                 elif curr_pos.direction == Direction.RIGHT:
                     curr_pos.x += 40
-                    curr_pos.y += 10
+                    curr_pos.y += 40
                 elif curr_pos.direction == Direction.BOTTOM:
-                    curr_pos.x += 10
+                    curr_pos.x += 40
                     curr_pos.y -= 40
             elif self.type_of_turn == TurnType.MEDIUM:
                 if curr_pos.direction == Direction.TOP:
-                    curr_pos.x -= 30
-                    curr_pos.y += 20
+                    curr_pos.x -= 40
+                    curr_pos.y += 40
                     curr_pos.direction = Direction.LEFT
                 elif curr_pos.direction == Direction.LEFT:
-                    curr_pos.x -= 20
-                    curr_pos.y -= 30
+                    curr_pos.x -= 40
+                    curr_pos.y -= 40
                     curr_pos.direction = Direction.BOTTOM
                 elif curr_pos.direction == Direction.RIGHT:
-                    curr_pos.x += 20
-                    curr_pos.y += 30
+                    curr_pos.x += 40
+                    curr_pos.y += 40
                     curr_pos.direction = Direction.TOP
                 elif curr_pos.direction == Direction.BOTTOM:
-                    curr_pos.x += 30
-                    curr_pos.y -= 20
+                    curr_pos.x += 40
+                    curr_pos.y -= 40
                     curr_pos.direction = Direction.RIGHT
 
         if self.right and not self.left and not self.reverse:
             if self.type_of_turn == TurnType.SMALL:
                 if curr_pos.direction == Direction.TOP:
-                    curr_pos.x += 10
+                    curr_pos.x += 40
                     curr_pos.y += 40
                 elif curr_pos.direction == Direction.LEFT:
                     curr_pos.x -= 40
-                    curr_pos.y += 10
+                    curr_pos.y += 40
                 elif curr_pos.direction == Direction.RIGHT:
                     curr_pos.x += 40
-                    curr_pos.y -= 10
+                    curr_pos.y -= 40
                 elif curr_pos.direction == Direction.BOTTOM:
-                    curr_pos.x -= 10
+                    curr_pos.x -= 40
                     curr_pos.y -= 40
             elif self.type_of_turn == TurnType.MEDIUM:
                 if curr_pos.direction == Direction.TOP:
-                    curr_pos.x += 30
-                    curr_pos.y += 20
+                    curr_pos.x += 40
+                    curr_pos.y += 40
                     curr_pos.direction = Direction.RIGHT
                 elif curr_pos.direction == Direction.LEFT:
-                    curr_pos.x -= 20
-                    curr_pos.y += 30
+                    curr_pos.x -= 40
+                    curr_pos.y += 40
                     curr_pos.direction = Direction.TOP
                 elif curr_pos.direction == Direction.RIGHT:
-                    curr_pos.x += 20
-                    curr_pos.y -= 30
+                    curr_pos.x += 40
+                    curr_pos.y -= 40
                     curr_pos.direction = Direction.BOTTOM
                 elif curr_pos.direction == Direction.BOTTOM:
-                    curr_pos.x -= 30
-                    curr_pos.y -= 20
+                    curr_pos.x -= 40
+                    curr_pos.y -= 40
                     curr_pos.direction = Direction.LEFT
 
         if self.left and not self.right and self.reverse:
             if self.type_of_turn == TurnType.SMALL:
                 if curr_pos.direction == Direction.TOP:
-                    curr_pos.x -= 10
+                    curr_pos.x -= 40
                     curr_pos.y -= 40
                 elif curr_pos.direction == Direction.LEFT:
                     curr_pos.x += 40
-                    curr_pos.y -= 10
+                    curr_pos.y -= 40
                 elif curr_pos.direction == Direction.RIGHT:
                     curr_pos.x -= 40
-                    curr_pos.y += 10
+                    curr_pos.y += 40
                 elif curr_pos.direction == Direction.BOTTOM:
-                    curr_pos.x += 10
+                    curr_pos.x += 40
                     curr_pos.y += 40
             elif self.type_of_turn == TurnType.MEDIUM:
                 if curr_pos.direction == Direction.TOP:
-                    curr_pos.x -= 20
-                    curr_pos.y -= 30
+                    curr_pos.x -= 40
+                    curr_pos.y -= 40
                     curr_pos.direction = Direction.RIGHT
                 elif curr_pos.direction == Direction.LEFT:
-                    curr_pos.x += 30
-                    curr_pos.y -= 20
+                    curr_pos.x += 40
+                    curr_pos.y -= 40
                     curr_pos.direction = Direction.TOP
                 elif curr_pos.direction == Direction.RIGHT:
-                    curr_pos.x -= 30
-                    curr_pos.y += 20
+                    curr_pos.x -= 40
+                    curr_pos.y += 40
                     curr_pos.direction = Direction.BOTTOM
                 elif curr_pos.direction == Direction.BOTTOM:
-                    curr_pos.x += 20
-                    curr_pos.y += 30
+                    curr_pos.x += 40
+                    curr_pos.y += 40
                     curr_pos.direction = Direction.LEFT
 
         if self.right and not self.left and self.reverse:
             if self.type_of_turn == TurnType.SMALL:
                 if curr_pos.direction == Direction.TOP:
-                    curr_pos.x += 10
+                    curr_pos.x += 40
                     curr_pos.y -= 40
                 elif curr_pos.direction == Direction.LEFT:
                     curr_pos.x += 40
-                    curr_pos.y += 10
+                    curr_pos.y += 40
                 elif curr_pos.direction == Direction.RIGHT:
                     curr_pos.x -= 40
-                    curr_pos.y -= 10
+                    curr_pos.y -= 40
                 elif curr_pos.direction == Direction.BOTTOM:
-                    curr_pos.x -= 10
+                    curr_pos.x -= 40
                     curr_pos.y += 40
             elif self.type_of_turn == TurnType.MEDIUM:
                 if curr_pos.direction == Direction.TOP:
-                    curr_pos.x += 20
-                    curr_pos.y -= 30
+                    curr_pos.x += 40
+                    curr_pos.y -= 40
                     curr_pos.direction = Direction.LEFT
                 elif curr_pos.direction == Direction.LEFT:
-                    curr_pos.x += 30
-                    curr_pos.y += 20
+                    curr_pos.x += 40
+                    curr_pos.y += 40
                     curr_pos.direction = Direction.BOTTOM
                 elif curr_pos.direction == Direction.RIGHT:
-                    curr_pos.x -= 30
-                    curr_pos.y -= 20
+                    curr_pos.x -= 40
+                    curr_pos.y -= 40
                     curr_pos.direction = Direction.TOP
                 elif curr_pos.direction == Direction.BOTTOM:
-                    curr_pos.x -= 20
-                    curr_pos.y += 30
+                    curr_pos.x -= 40
+                    curr_pos.y += 40
                     curr_pos.direction = Direction.RIGHT
 
         return self
@@ -198,7 +201,8 @@ class TurnCommand(Command):
         changes the robot position according to what command it is and where the robot is currently at
         """
         assert isinstance(curr_pos, RobotPosition), print(
-            "Cannot apply turn command on non-robot positions!")
+            "Cannot apply turn command on non-robot positions!"
+        )
 
         # Get change in (x, y) coordinate.
 
@@ -206,132 +210,132 @@ class TurnCommand(Command):
         if self.left and not self.right and not self.reverse:
             if self.type_of_turn == TurnType.SMALL:
                 if curr_pos.direction == Direction.TOP:
-                    curr_pos.x -= 10
+                    curr_pos.x -= 40
                     curr_pos.y += 40
                 elif curr_pos.direction == Direction.LEFT:
                     curr_pos.x -= 40
-                    curr_pos.y -= 10
+                    curr_pos.y -= 40
                 elif curr_pos.direction == Direction.RIGHT:
                     curr_pos.x += 40
-                    curr_pos.y += 10
+                    curr_pos.y += 40
                 elif curr_pos.direction == Direction.BOTTOM:
-                    curr_pos.x += 10
+                    curr_pos.x += 40
                     curr_pos.y -= 40
             elif self.type_of_turn == TurnType.MEDIUM:
                 if curr_pos.direction == Direction.TOP:
-                    curr_pos.x -= 30
-                    curr_pos.y += 20
+                    curr_pos.x -= 40
+                    curr_pos.y += 40
                     curr_pos.direction = Direction.LEFT
                 elif curr_pos.direction == Direction.LEFT:
-                    curr_pos.x -= 20
-                    curr_pos.y -= 30
+                    curr_pos.x -= 40
+                    curr_pos.y -= 40
                     curr_pos.direction = Direction.BOTTOM
                 elif curr_pos.direction == Direction.RIGHT:
-                    curr_pos.x += 20
-                    curr_pos.y += 30
+                    curr_pos.x += 40
+                    curr_pos.y += 40
                     curr_pos.direction = Direction.TOP
                 elif curr_pos.direction == Direction.BOTTOM:
-                    curr_pos.x += 30
-                    curr_pos.y -= 20
+                    curr_pos.x += 40
+                    curr_pos.y -= 40
                     curr_pos.direction = Direction.RIGHT
 
         # turn right and forward
         if self.right and not self.left and not self.reverse:
             if self.type_of_turn == TurnType.SMALL:
                 if curr_pos.direction == Direction.TOP:
-                    curr_pos.x += 10
+                    curr_pos.x += 40
                     curr_pos.y += 40
                 elif curr_pos.direction == Direction.LEFT:
                     curr_pos.x -= 40
-                    curr_pos.y += 10
+                    curr_pos.y += 40
                 elif curr_pos.direction == Direction.RIGHT:
                     curr_pos.x += 40
-                    curr_pos.y -= 10
+                    curr_pos.y -= 40
                 elif curr_pos.direction == Direction.BOTTOM:
-                    curr_pos.x -= 10
+                    curr_pos.x -= 40
                     curr_pos.y -= 40
             elif self.type_of_turn == TurnType.MEDIUM:
                 if curr_pos.direction == Direction.TOP:
-                    curr_pos.x += 30
-                    curr_pos.y += 20
+                    curr_pos.x += 40
+                    curr_pos.y += 40
                     curr_pos.direction = Direction.RIGHT
                 elif curr_pos.direction == Direction.LEFT:
-                    curr_pos.x -= 20
-                    curr_pos.y += 30
+                    curr_pos.x -= 40
+                    curr_pos.y += 40
                     curr_pos.direction = Direction.TOP
                 elif curr_pos.direction == Direction.RIGHT:
-                    curr_pos.x += 20
-                    curr_pos.y -= 30
+                    curr_pos.x += 40
+                    curr_pos.y -= 40
                     curr_pos.direction = Direction.BOTTOM
                 elif curr_pos.direction == Direction.BOTTOM:
-                    curr_pos.x -= 30
-                    curr_pos.y -= 20
+                    curr_pos.x -= 40
+                    curr_pos.y -= 40
                     curr_pos.direction = Direction.LEFT
 
         # turn front wheels left and reverse
         if self.left and not self.right and self.reverse:
             if self.type_of_turn == TurnType.SMALL:
                 if curr_pos.direction == Direction.TOP:
-                    curr_pos.x -= 10
+                    curr_pos.x -= 40
                     curr_pos.y -= 40
                 elif curr_pos.direction == Direction.LEFT:
                     curr_pos.x += 40
-                    curr_pos.y -= 10
+                    curr_pos.y -= 40
                 elif curr_pos.direction == Direction.RIGHT:
                     curr_pos.x -= 40
-                    curr_pos.y += 10
+                    curr_pos.y += 40
                 elif curr_pos.direction == Direction.BOTTOM:
-                    curr_pos.x += 10
+                    curr_pos.x += 40
                     curr_pos.y += 40
             elif self.type_of_turn == TurnType.MEDIUM:
                 if curr_pos.direction == Direction.TOP:
-                    curr_pos.x -= 20
-                    curr_pos.y -= 30
+                    curr_pos.x -= 40
+                    curr_pos.y -= 40
                     curr_pos.direction = Direction.RIGHT
                 elif curr_pos.direction == Direction.LEFT:
-                    curr_pos.x += 30
-                    curr_pos.y -= 20
+                    curr_pos.x += 40
+                    curr_pos.y -= 40
                     curr_pos.direction = Direction.TOP
                 elif curr_pos.direction == Direction.RIGHT:
-                    curr_pos.x -= 30
-                    curr_pos.y += 20
+                    curr_pos.x -= 40
+                    curr_pos.y += 40
                     curr_pos.direction = Direction.BOTTOM
                 elif curr_pos.direction == Direction.BOTTOM:
-                    curr_pos.x += 20
-                    curr_pos.y += 30
+                    curr_pos.x += 40
+                    curr_pos.y += 40
                     curr_pos.direction = Direction.LEFT
 
         # turn front wheels right and reverse
         if self.right and not self.left and self.reverse:
             if self.type_of_turn == TurnType.SMALL:
                 if curr_pos.direction == Direction.TOP:
-                    curr_pos.x += 10
+                    curr_pos.x += 40
                     curr_pos.y -= 40
                 elif curr_pos.direction == Direction.LEFT:
                     curr_pos.x += 40
-                    curr_pos.y += 10
+                    curr_pos.y += 40
                 elif curr_pos.direction == Direction.RIGHT:
                     curr_pos.x -= 40
-                    curr_pos.y -= 10
+                    curr_pos.y -= 40
                 elif curr_pos.direction == Direction.BOTTOM:
-                    curr_pos.x -= 10
+                    curr_pos.x -= 40
                     curr_pos.y += 40
             elif self.type_of_turn == TurnType.MEDIUM:
                 if curr_pos.direction == Direction.TOP:
-                    curr_pos.x += 20
-                    curr_pos.y -= 30
+                    curr_pos.x += 40
+                    curr_pos.y -= 40
                     curr_pos.direction = Direction.LEFT
                 elif curr_pos.direction == Direction.LEFT:
-                    curr_pos.x += 30
-                    curr_pos.y += 20
+                    curr_pos.x += 40
+                    curr_pos.y += 40
                     curr_pos.direction = Direction.BOTTOM
                 elif curr_pos.direction == Direction.RIGHT:
-                    curr_pos.x -= 30
-                    curr_pos.y -= 20
+                    curr_pos.x -= 40
+                    curr_pos.y -= 40
                     curr_pos.direction = Direction.TOP
                 elif curr_pos.direction == Direction.BOTTOM:
-                    curr_pos.x -= 20
-                    curr_pos.y += 30
+                    curr_pos.x -= 40
+                    curr_pos.y += 40
                     curr_pos.direction = Direction.RIGHT
 
         return self
