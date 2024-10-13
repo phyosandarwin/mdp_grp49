@@ -4,6 +4,6 @@
 
 > Checklist Progress
 - [x] Android Controller
-- [ ] Algorithm
-- [ ] RPI and Image Processing
-- [ ] STM
+- [x] Algorithm
+- [x] RPI and Image Processing
+- [x] STM
