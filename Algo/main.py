@@ -164,62 +164,62 @@ def add_coords(command, dir):
             x += int(command[2:])
     elif (command[:2]) == "LF":
         if dir == 0:
-            x -= 30
-            y += 20
+            x -= 40
+            y += 40
         if dir == 1:
-            x += 20
-            y += 30
+            x += 40
+            y += 40
         if dir == 2:
-            x += 30
-            y -= 20
+            x += 40
+            y -= 40
         if dir == 3:
-            x -= 20
-            y -= 30
+            x -= 40
+            y -= 40
         dir -= 1
         dir %= 4
     elif (command[:2]) == "RF":
         if dir == 0:
-            x += 30
-            y += 20
+            x += 40
+            y += 40
         if dir == 1:
-            x += 20
-            y -= 30
+            x += 40
+            y -= 40
         if dir == 2:
-            x -= 30
-            y -= 20
+            x -= 40
+            y -= 40
         if dir == 3:
-            x -= 20
-            y += 30
+            x -= 40
+            y += 40
         dir += 1
         dir %= 4
     elif (command[:2]) == "LB":
         if dir == 0:
-            x -= 20
-            y -= 30
+            x -= 40
+            y -= 40
         if dir == 1:
-            x -= 30
-            y += 20
+            x -= 40
+            y += 40
         if dir == 2:
-            x += 20
-            y += 30
+            x += 40
+            y += 40
         if dir == 3:
-            x += 30
-            y -= 20
+            x += 40
+            y -= 40
         dir += 1
         dir %= 4
     elif (command[:2]) == "RB":
         if dir == 0:
-            x += 20
-            y -= 30
+            x += 40
+            y -= 40
         if dir == 1:
-            x -= 30
-            y -= 20
+            x -= 40
+            y -= 40
         if dir == 2:
-            x -= 20
-            y += 30
+            x -= 40
+            y += 40
         if dir == 3:
-            x += 30
-            y += 20
+            x += 40
+            y += 40
         dir -= 1
         dir %= 4
     return (x, y, dir)
