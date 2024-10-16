@@ -15,6 +15,7 @@ import sys
 import socket
 from algo_handler import AlgoHandler
 import json
+from collections import Counter
 
 os.makedirs('logs', exist_ok=True)
 # Configure logging
@@ -103,6 +104,10 @@ class RPiServer:
         task1_handler.setFormatter(task1_formatter)
         self.task1_logger.addHandler(task1_handler)
         self.task1_logger.propagate = False  # Prevent logging from propagating to the main logger
+
+
+
+        self.predict_image_result =None
     def clear_log_files(self):
         """Clear the contents of all log files during initialization."""
         log_files = [
@@ -225,8 +230,11 @@ class RPiServer:
 
             if 'class_name' in json_response:  # Send only when class name is identified
                 result_class_name = json_response['class_name']
+                self.predict_image_result = result_class_name
                 # print(f"class name = {result_class_name}")
                 result_send = f'IMG-{obj_id_int}-{result_class_name}'#unhardcode this
+
+
                 self.image_rec_logger.debug("unhardcode this in the future")
                 self.image_rec_logger.debug(result_send)
                 self.bt_comm.send_message(result_send)
@@ -329,7 +337,8 @@ class RPiServer:
             "mode":mode
         }
         return payload
-    def start_stm(self,commands,send_coords):
+    
+    def start_stm(self):
         # Initialize STM communication
         self.stm_comm = STM_Controller(
             port='/dev/ttyUSB0',
@@ -338,21 +347,21 @@ class RPiServer:
             pause_done_event=self.pause_done_event,
             stm_to_rpi_queue=self.stm_to_rpi_queue 
         )
-        self.stm_comm.start()  # Start the STM_Controller thread
-        print("STM_Controller thread started.")
+        # self.stm_comm.start()  # Start the STM_Controller thread
+        # print("STM_Controller thread started.")
+        self.stm_comm.connect()
+        # self.stm_comm.add_commands(commands,send_coords)
 
-        self.stm_comm.add_commands(commands,send_coords)
+        # self.pause_handler_thread = threading.Thread(target=self.pause_handler, daemon=True)
+        # self.pause_handler_thread.start()
 
-        self.pause_handler_thread = threading.Thread(target=self.pause_handler, daemon=True)
-        self.pause_handler_thread.start()
+        # #must add this to join back so TASK 1 can continue down
+        # self.pause_handler_thread.join()
+        # print("Pause handler thread completed.")
 
-        #must add this to join back so TASK 1 can continue down
-        self.pause_handler_thread.join()
-        print("Pause handler thread completed.")
-
-        # Now, join the STM_Controller thread to ensure it has finished processing commands
-        self.stm_comm.join()
-        print("STM_Controller thread completed.")   
+        # # Now, join the STM_Controller thread to ensure it has finished processing commands
+        # self.stm_comm.join()
+        # print("STM_Controller thread completed.")   
     
     def task_1(self):
         print('task 1 start...setting task_finish to false')
@@ -401,7 +410,9 @@ class RPiServer:
             print(type(message))
         except Exception as e:
             print(e)
+        
         self.algo_handler.send_external_message(message)
+        requests
         self.task1_logger.debug(f"Sent message to AlgoHandler: {message}")
         print(f"Sent message to AlgoHandler: {message}")
 
@@ -441,16 +452,48 @@ class RPiServer:
         for coord in car_coords:
             # self.bt_comm.send_message(",".join(car_coords[i]))
             send = "UPDATE-" + str(int(coord[0]/10)+1) +  '-' + str(int(coord[1]/10)+1) +  '-' + coord[2]
-            self.bt_comm.send_message(send)
+            # self.bt_comm.send_message(send)
             send_coords.append(send)
-            time.sleep(1)
+            # time.sleep(1)
             
         formatted_cmds  = process_strings(robot_commands.split(','))
         print(f"response from algo{formatted_cmds}")
         self.logger.info(f"response from algo{formatted_cmds}")
 
         print('===running stm=====')
-        self.start_stm(formatted_cmds,send_coords)
+        self.start_stm()
+        try:
+            self.stm_comm.add_commands(formatted_cmds,send_coords)
+        except Exception as e:
+            print(e)
+
+        i = 0
+        while not self.stm_comm.command_queue.empty():
+            stm_command = self.stm_comm.command_queue.get()
+
+            # Case 1: Pause Command (Take photo)
+            if stm_command.startswith('P_'):  # Pause command
+                # Extract the pause time; assuming format 'P___<number>'
+                obj_id_str = ''.join(filter(str.isdigit, message))
+                print('OBJ-ID_STR')
+                print(obj_id_str)
+                try:
+                    obj_id_int= int(obj_id_str)
+                except Exception as e:
+                    obj_id_int= int(obj_id_str)
+                    print(obj_id_str)
+                    print(e)
+
+                self.image_rec(obj_id_int)
+                time.sleep(1)
+
+            # Case 2: Non Pause Command
+            else:
+                self.stm_comm.send_next_command(stm_command)
+                time.sleep(1)
+
+            self.bt_comm.send_message(send_coords[i])
+            i += 1
 
         #send message here to android to tell it now then start the clock
         # while True:
@@ -469,10 +512,30 @@ class RPiServer:
         self.task_finshed = True
         return
     def task_2(self):
+        self.start_stm()
+        self.stm_comm.send_next_command('S   ')
         print('task 2 start...setting task_finish to false')
         self.task_finshed = False
-        time.sleep(5)
+        count =0
+        while count <= 50:
 
+            self.image_rec(None)
+            count +=1
+            print(self.predict_image_result)
+            if self.predict_image_result:
+                final_result = self.predict_image_result[0]
+                print('====')
+                print(final_result)
+                if final_result == 'left':
+                    print('++++=')
+                    self.stm_comm.send_next_command('L   ')
+                if final_result == 'right':
+                    self.stm_comm.send_next_command('R   ')
+                time.sleep(1)
+            
+        # final_result = Counter(results_store).most_common(1)
+        # self.stm_comm.send_next_command(final_result)
+        # print(results_store)
         print('task 2 finished')
         self.bt_comm.whichTask = ''
         self.android_info = None
@@ -485,9 +548,9 @@ class RPiServer:
         print(f'Sending images to {self.predict_url}')
 
         # Start monitoring STM to RPi queue
-        print("staring STM_TO_RPI QUEUE THREAD")
-        self.stm_monitor_thread = threading.Thread(target=self.monitor_stm_queue, daemon=True)
-        self.stm_monitor_thread.start()
+        # print("staring STM_TO_RPI QUEUE THREAD")
+        # self.stm_monitor_thread = threading.Thread(target=self.monitor_stm_queue, daemon=True)
+        # self.stm_monitor_thread.start()
 
         self.start_bluetooth()
 
@@ -548,11 +611,11 @@ class RPiServer:
              # Stop the STM_Controller thread
             if self.stm_comm:
                 self.stm_comm.stop()
-                self.stm_comm.join()
+                # self.stm_comm.join()
             # Wait for the pause_handler thread to finish
-                self.pause_handler_thread.join()
-            if self.stm_monitor_thread:
-                self.stm_monitor_thread.join()
+                # self.pause_handler_thread.join()
+            # if self.stm_monitor_thread:
+            #     self.stm_monitor_thread.join()
             print("RPiServer stopped.")
 
 
