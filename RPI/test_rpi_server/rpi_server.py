@@ -104,13 +104,13 @@ class RPiServer:
         self.task1_logger.addHandler(task1_handler)
         self.task1_logger.propagate = False  # Prevent logging from propagating to the main logger
 
-        self.task1_logger = logging.getLogger(f"{self.__class__.__name__}.task2")
-        self.task1_logger.setLevel(logging.DEBUG)
-        task1_handler = logging.FileHandler("./logs/task1.log")
-        task1_formatter = logging.Formatter('%(asctime)s [%(levelname)s] %(name)s: %(message)s')
-        task1_handler.setFormatter(task1_formatter)
-        self.task1_logger.addHandler(task1_handler)
-        self.task1_logger.propagate = False  # Prevent logging from propagating to the main logger
+        self.task2_logger = logging.getLogger(f"{self.__class__.__name__}.task2")
+        self.task2_logger.setLevel(logging.DEBUG)
+        task2_handler = logging.FileHandler("./logs/task2.log")
+        task2_formatter = logging.Formatter('%(asctime)s [%(levelname)s] %(name)s: %(message)s')
+        task2_handler.setFormatter(task2_formatter)
+        self.task2_logger.addHandler(task2_handler)
+        self.task2_logger.propagate = False  # Prevent logging from propagating to the main logger
 
     def clear_log_files(self):
         """Clear the contents of all log files during initialization."""
