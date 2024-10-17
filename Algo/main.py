@@ -25,13 +25,9 @@ client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # Connect to the server
 print("Waiting to Connect to RPI")
 client_socket.connect((server_ip, server_port))
-
 print("Connected")
-
 data = client_socket.recv(2048)
-
 print(f"Received: {data.decode('utf-8')}")
-
 obs = data.decode("utf-8")
 print(f"Received: {data}")
 
@@ -140,7 +136,7 @@ rpi_commands = {
 # adding coords_str
 def add_coords(command, dir):
     x, y = 0, 0
-    d1, d2 = 40, 30
+    d1, d2 = 20, 10
     if (command[:2]) == "SF":
         if dir == 0:
             y += int(command[2:])
@@ -191,32 +187,32 @@ def add_coords(command, dir):
         dir %= 4
     elif (command[:2]) == "LB":
         if dir == 0:
-            x -= d1
-            y -= d2
-        if dir == 1:
             x -= d2
-            y += d1
-        if dir == 2:
-            x += d1
-            y += d2
-        if dir == 3:
-            x += d2
             y -= d1
+        if dir == 1:
+            x -= d1
+            y += d2
+        if dir == 2:
+            x += d2
+            y += d1
+        if dir == 3:
+            x += d1
+            y -= d2
         dir += 1
         dir %= 4
     elif (command[:2]) == "RB":
         if dir == 0:
-            x += d1
-            y -= d2
-        if dir == 1:
-            x -= d2
-            y -= d1
-        if dir == 2:
-            x -= d1
-            y += d2
-        if dir == 3:
             x += d2
+            y -= d1
+        if dir == 1:
+            x -= d1
+            y -= d2
+        if dir == 2:
+            x -= d2
             y += d1
+        if dir == 3:
+            x += d1
+            y += d2
         dir -= 1
         dir %= 4
     return (x, y, dir)
