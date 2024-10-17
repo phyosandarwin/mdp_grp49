@@ -3,12 +3,10 @@ import grid
 import constants
 import jsonParse
 import obstacle
-import math
 import socket
-import time
 from path_finding import hamiltonian
 from robot import robot
-from robot.position import Position, RobotPosition
+from robot.position import Position
 from robot.direction import Direction
 from buttons import draw_button, handle_button_click, visitedSquares, draw_text_button
 from run_algo import run_algo
@@ -99,8 +97,6 @@ obstacles = [
 # }
 # '''
 
-
-# result = jsonParse.parse_json(obs)
 obstacles = jsonParse.convert_json(screen, obs)
 
 # buttons
@@ -144,6 +140,7 @@ rpi_commands = {
 # adding coords_str
 def add_coords(command, dir):
     x, y = 0, 0
+    d1, d2 = 40, 30
     if (command[:2]) == "SF":
         if dir == 0:
             y += int(command[2:])
@@ -164,62 +161,62 @@ def add_coords(command, dir):
             x += int(command[2:])
     elif (command[:2]) == "LF":
         if dir == 0:
-            x -= 40
-            y += 40
+            x -= d1
+            y += d2
         if dir == 1:
-            x += 40
-            y += 40
+            x += d2
+            y += d1
         if dir == 2:
-            x += 40
-            y -= 40
+            x += d1
+            y -= d2
         if dir == 3:
-            x -= 40
-            y -= 40
+            x -= d2
+            y -= d1
         dir -= 1
         dir %= 4
     elif (command[:2]) == "RF":
         if dir == 0:
-            x += 40
-            y += 40
+            x += d1
+            y += d2
         if dir == 1:
-            x += 40
-            y -= 40
+            x += d2
+            y -= d1
         if dir == 2:
-            x -= 40
-            y -= 40
+            x -= d1
+            y -= d2
         if dir == 3:
-            x -= 40
-            y += 40
+            x -= d2
+            y += d1
         dir += 1
         dir %= 4
     elif (command[:2]) == "LB":
         if dir == 0:
-            x -= 40
-            y -= 40
+            x -= d1
+            y -= d2
         if dir == 1:
-            x -= 40
-            y += 40
+            x -= d2
+            y += d1
         if dir == 2:
-            x += 40
-            y += 40
+            x += d1
+            y += d2
         if dir == 3:
-            x += 40
-            y -= 40
+            x += d2
+            y -= d1
         dir += 1
         dir %= 4
     elif (command[:2]) == "RB":
         if dir == 0:
-            x += 40
-            y -= 40
+            x += d1
+            y -= d2
         if dir == 1:
-            x -= 40
-            y -= 40
+            x -= d2
+            y -= d1
         if dir == 2:
-            x -= 40
-            y += 40
+            x -= d1
+            y += d2
         if dir == 3:
-            x += 40
-            y += 40
+            x += d2
+            y += d1
         dir -= 1
         dir %= 4
     return (x, y, dir)
