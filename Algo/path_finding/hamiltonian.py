@@ -179,6 +179,7 @@ class Hamiltonian:
                         break
                 if result is None:
                     cost += 9999
+                    costs[int(cobs.number) - 1][int(obstacle.number) - 1] = 9999
                 else:
                     curr_cost = curr_costs[
                         obstacle.get_robot_position().xy()

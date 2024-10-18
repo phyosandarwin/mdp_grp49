@@ -16,7 +16,7 @@ class ScanCommand(Command):
         self.tick()
 
     def rpi_message(self):
-        return f"P___{self.obj_index}"
+        return f"SB010,P___{self.obj_index},SF010"
 
     def apply(self, curr_pos):
         pass

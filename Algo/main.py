@@ -17,7 +17,7 @@ import json
 # RPI Connection
 # Configure the client
 server_ip = "10.96.49.1"  # Replace with your PC's IP address
-server_port = 8004  # Use the same port number as on your PC
+server_port = 8007  # Use the same port number as on your PC
 
 # # Create a socket
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

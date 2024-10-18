@@ -56,13 +56,13 @@ class a_star:
             TurnCommand(TurnType.MEDIUM, True, False, False),  # L MEDIUM turn, forward
             # TurnCommand(TurnType.LARGE, True, False, False),  # L LARGE turn, forward
             # TurnCommand(TurnType.SMALL, True, False, True),  # L SMALL turn, reverse
-            TurnCommand(TurnType.MEDIUM, True, False, True),  # L MEDIUM turn, reverse
+            # TurnCommand(TurnType.MEDIUM, True, False, True),  # L MEDIUM turn, reverse
             # TurnCommand(TurnType.LARGE, True, False, True),  # L LARGE turn, reverse
             # TurnCommand(TurnType.SMALL, False, True, False),  # R SMALL turn, forward
             TurnCommand(TurnType.MEDIUM, False, True, False),  # R MEDIUM turn, forward
             # TurnCommand(TurnType.LARGE, False, True, False),  # R LARGE turn, forward
             # TurnCommand(TurnType.SMALL, False, True, True),  # R SMALL turn, reverse
-            TurnCommand(TurnType.MEDIUM, False, True, True),  # R MEDIUM turn, reverse
+            # TurnCommand(TurnType.MEDIUM, False, True, True),  # R MEDIUM turn, reverse
             # TurnCommand(TurnType.LARGE, False, True, True),  # R LARGE turn, reverse
         ]
 
