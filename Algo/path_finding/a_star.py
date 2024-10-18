@@ -272,7 +272,7 @@ class a_star:
                 # Obtain Commands Required to reach Goal
                 commands = self.extract_commands(backtrack, goal_node_with_dir, flag)
 
-                return (current_position, commands)
+                return (current_position, commands, cost)
 
             # Otherwise, we go through all possible neighbours we can reach from current nodes
 
@@ -300,7 +300,7 @@ class a_star:
                     cost[new_node] = new_cost
 
         # If we are here, means that there was no path that we could find.
-        return (None, [])
+        return (None, [], cost)
 
     def extract_commands(self, backtrack, goal_node, flag):
         """
