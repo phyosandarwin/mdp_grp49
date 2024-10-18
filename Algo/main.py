@@ -17,7 +17,7 @@ import json
 # RPI Connection
 # Configure the client
 server_ip = "10.96.49.1"  # Replace with your PC's IP address
-server_port = 8005  # Use the same port number as on your PC
+server_port = 8004  # Use the same port number as on your PC
 
 # # Create a socket
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -143,10 +143,10 @@ rpi_commands = {
 # adding coords_str
 def add_coords(command, dir):
     x, y = 0, 0
-    fr1, fr2 = 30, 10
+    fr1, fr2 = 30, 20
     fl1, fl2 = 30, 20
-    br1, br2 = 20, 30
-    bl1, bl2 = 30, 30
+    br1, br2 = 30, 30
+    bl1, bl2 = 20, 30
     if (command[:2]) == "SF":
         if dir == 0:
             y += int(command[2:])
@@ -253,7 +253,7 @@ for command in commands_str.split(","):
 
 print(coords)
 
-rpi_commands["value"]["coords"] = coords
+# rpi_commands["value"]["coords"] = coords
 rpi_commands_json = json.dumps(rpi_commands)
 
 print(rpi_commands)

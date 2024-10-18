@@ -10,10 +10,10 @@ class TurnCommand(Command):
     LARGE_TURN_TIME = 30
 
     # change in coords facing north
-    fr1, fr2 = 30, 10
+    fr1, fr2 = 30, 20
     fl1, fl2 = 30, 20
-    br1, br2 = 20, 30
-    bl1, bl2 = 30, 30
+    br1, br2 = 30, 30
+    bl1, bl2 = 20, 30
 
     def __init__(self, type_of_turn, left, right, reverse):
         turn_time = {
@@ -217,20 +217,20 @@ class TurnCommand(Command):
         return self
 
     # FR
-    # cmds = {'commands': 'B012,FR90,B006'}
+    # cmds = {'commands': 'B010,FR90,B012'}
     # FL
-    # cmds = {'commands': 'FL90,B007'}
+    # cmds = {'commands': 'B006,FL90,B007'}
     # BL
     # cmds = {'commands': 'F005,BL90,B005'}
     # BR
-    # cmds = {'commands': 'F012,BR90,B006'}
+    # cmds = {'commands': 'F013,BR90,B005'}
 
     def rpi_message(self):
         if self.left and not self.right and not self.reverse:
             if self.type_of_turn == TurnType.SMALL:
                 return "KF000"
             elif self.type_of_turn == TurnType.MEDIUM:
-                return "LF090,SB007"
+                return "SB006,LF090,SB007"
             elif self.type_of_turn == TurnType.LARGE:
                 return "LF180"
         elif self.left and not self.right and self.reverse:
@@ -244,13 +244,13 @@ class TurnCommand(Command):
             if self.type_of_turn == TurnType.SMALL:
                 return "JF000"
             elif self.type_of_turn == TurnType.MEDIUM:
-                return "SB012,RF090,SB006"
+                return "SB010,RF090,SB012"
             elif self.type_of_turn == TurnType.LARGE:
                 return "RF180"
         else:
             if self.type_of_turn == TurnType.SMALL:
                 return "JB000"
             elif self.type_of_turn == TurnType.MEDIUM:
-                return "RB090"
+                return "SF013,RB180,SB005"
             elif self.type_of_turn == TurnType.LARGE:
-                return "SF012,RB180,SB006"
+                return "RB180"

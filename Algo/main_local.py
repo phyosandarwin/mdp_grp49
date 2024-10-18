@@ -123,10 +123,10 @@ rpi_commands = {
 # adding coords_str
 def add_coords(command, dir):
     x, y = 0, 0
-    fr1, fr2 = 30, 10
+    fr1, fr2 = 30, 20
     fl1, fl2 = 30, 20
-    br1, br2 = 20, 30
-    bl1, bl2 = 30, 30
+    br1, br2 = 30, 30
+    bl1, bl2 = 20, 30
     if (command[:2]) == "SF":
         if dir == 0:
             y += int(command[2:])
