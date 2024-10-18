@@ -9,9 +9,11 @@ class TurnCommand(Command):
     MEDIUM_TURN_TIME = 20
     LARGE_TURN_TIME = 30
 
-    # on right turn, x+d1, y+d2
-    D1 = 20
-    D2 = 10
+    # change in coords facing north
+    fr1, fr2 = 30, 10
+    fl1, fl2 = 30, 20
+    br1, br2 = 20, 30
+    bl1, bl2 = 30, 30
 
     def __init__(self, type_of_turn, left, right, reverse):
         turn_time = {
@@ -40,82 +42,85 @@ class TurnCommand(Command):
             curr_pos, RobotPosition
         ), "Cannot apply turn command on non-robot positions!"
 
+        # fl
         if self.left and not self.right and not self.reverse:
             if self.type_of_turn == TurnType.MEDIUM:
                 if curr_pos.direction == Direction.TOP:
-                    curr_pos.x -= TurnCommand.D1
-                    curr_pos.y += TurnCommand.D2
+                    curr_pos.x -= TurnCommand.fl1
+                    curr_pos.y += TurnCommand.fl2
                     curr_pos.direction = Direction.LEFT
+                elif curr_pos.direction == Direction.BOTTOM:
+                    curr_pos.x += TurnCommand.fl1
+                    curr_pos.y -= TurnCommand.fl2
+                    curr_pos.direction = Direction.RIGHT
                 elif curr_pos.direction == Direction.LEFT:
-                    curr_pos.x -= TurnCommand.D2
-                    curr_pos.y -= TurnCommand.D1
+                    curr_pos.x -= TurnCommand.fl2
+                    curr_pos.y -= TurnCommand.fl1
                     curr_pos.direction = Direction.BOTTOM
                 elif curr_pos.direction == Direction.RIGHT:
-                    curr_pos.x += TurnCommand.D2
-                    curr_pos.y += TurnCommand.D1
+                    curr_pos.x += TurnCommand.fl2
+                    curr_pos.y += TurnCommand.fl1
                     curr_pos.direction = Direction.TOP
-                elif curr_pos.direction == Direction.BOTTOM:
-                    curr_pos.x += TurnCommand.D1
-                    curr_pos.y -= TurnCommand.D2
-                    curr_pos.direction = Direction.RIGHT
 
-        # Turn right
+        # fr
         if self.right and not self.left and not self.reverse:
             if self.type_of_turn == TurnType.MEDIUM:
                 if curr_pos.direction == Direction.TOP:
-                    curr_pos.x += TurnCommand.D1
-                    curr_pos.y += TurnCommand.D2
+                    curr_pos.x += TurnCommand.fr1
+                    curr_pos.y += TurnCommand.fr2
                     curr_pos.direction = Direction.RIGHT
+                elif curr_pos.direction == Direction.BOTTOM:
+                    curr_pos.x -= TurnCommand.fr1
+                    curr_pos.y -= TurnCommand.fr2
+                    curr_pos.direction = Direction.LEFT
                 elif curr_pos.direction == Direction.LEFT:
-                    curr_pos.x -= TurnCommand.D2
-                    curr_pos.y += TurnCommand.D1
+                    curr_pos.x -= TurnCommand.fr2
+                    curr_pos.y += TurnCommand.fr1
                     curr_pos.direction = Direction.TOP
                 elif curr_pos.direction == Direction.RIGHT:
-                    curr_pos.x += TurnCommand.D2
-                    curr_pos.y -= TurnCommand.D1
+                    curr_pos.x += TurnCommand.fr2
+                    curr_pos.y -= TurnCommand.fr1
                     curr_pos.direction = Direction.BOTTOM
-                elif curr_pos.direction == Direction.BOTTOM:
-                    curr_pos.x -= TurnCommand.D1
-                    curr_pos.y -= TurnCommand.D2
-                    curr_pos.direction = Direction.LEFT
 
+        # bl
         if self.left and not self.right and self.reverse:
             if self.type_of_turn == TurnType.MEDIUM:
                 if curr_pos.direction == Direction.TOP:
-                    curr_pos.x -= TurnCommand.D2
-                    curr_pos.y -= TurnCommand.D1
+                    curr_pos.x -= TurnCommand.bl1
+                    curr_pos.y -= TurnCommand.bl2
                     curr_pos.direction = Direction.RIGHT
+                elif curr_pos.direction == Direction.BOTTOM:
+                    curr_pos.x += TurnCommand.bl1
+                    curr_pos.y += TurnCommand.bl2
+                    curr_pos.direction = Direction.LEFT
                 elif curr_pos.direction == Direction.LEFT:
-                    curr_pos.x += TurnCommand.D1
-                    curr_pos.y -= TurnCommand.D2
+                    curr_pos.x += TurnCommand.bl2
+                    curr_pos.y -= TurnCommand.bl1
                     curr_pos.direction = Direction.TOP
                 elif curr_pos.direction == Direction.RIGHT:
-                    curr_pos.x -= TurnCommand.D1
-                    curr_pos.y += TurnCommand.D2
+                    curr_pos.x -= TurnCommand.bl2
+                    curr_pos.y += TurnCommand.bl1
                     curr_pos.direction = Direction.BOTTOM
-                elif curr_pos.direction == Direction.BOTTOM:
-                    curr_pos.x += TurnCommand.D2
-                    curr_pos.y += TurnCommand.D1
-                    curr_pos.direction = Direction.LEFT
 
+        # br
         if self.right and not self.left and self.reverse:
             if self.type_of_turn == TurnType.MEDIUM:
                 if curr_pos.direction == Direction.TOP:
-                    curr_pos.x += TurnCommand.D2
-                    curr_pos.y -= TurnCommand.D1
+                    curr_pos.x += TurnCommand.br1
+                    curr_pos.y -= TurnCommand.br2
                     curr_pos.direction = Direction.LEFT
+                elif curr_pos.direction == Direction.BOTTOM:
+                    curr_pos.x -= TurnCommand.br1
+                    curr_pos.y += TurnCommand.br2
+                    curr_pos.direction = Direction.RIGHT
                 elif curr_pos.direction == Direction.LEFT:
-                    curr_pos.x += TurnCommand.D1
-                    curr_pos.y += TurnCommand.D2
+                    curr_pos.x += TurnCommand.br2
+                    curr_pos.y += TurnCommand.br1
                     curr_pos.direction = Direction.BOTTOM
                 elif curr_pos.direction == Direction.RIGHT:
-                    curr_pos.x -= TurnCommand.D1
-                    curr_pos.y -= TurnCommand.D2
+                    curr_pos.x -= TurnCommand.br2
+                    curr_pos.y -= TurnCommand.br1
                     curr_pos.direction = Direction.TOP
-                elif curr_pos.direction == Direction.BOTTOM:
-                    curr_pos.x -= TurnCommand.D2
-                    curr_pos.y += TurnCommand.D1
-                    curr_pos.direction = Direction.RIGHT
 
         return self
 
@@ -133,110 +138,119 @@ class TurnCommand(Command):
         if self.left and not self.right and not self.reverse:
             if self.type_of_turn == TurnType.MEDIUM:
                 if curr_pos.direction == Direction.TOP:
-                    curr_pos.x -= TurnCommand.D1
-                    curr_pos.y += TurnCommand.D2
+                    curr_pos.x -= TurnCommand.fl1
+                    curr_pos.y += TurnCommand.fl2
                     curr_pos.direction = Direction.LEFT
+                elif curr_pos.direction == Direction.BOTTOM:
+                    curr_pos.x += TurnCommand.fl1
+                    curr_pos.y -= TurnCommand.fl2
+                    curr_pos.direction = Direction.RIGHT
                 elif curr_pos.direction == Direction.LEFT:
-                    curr_pos.x -= TurnCommand.D2
-                    curr_pos.y -= TurnCommand.D1
+                    curr_pos.x -= TurnCommand.fl2
+                    curr_pos.y -= TurnCommand.fl1
                     curr_pos.direction = Direction.BOTTOM
                 elif curr_pos.direction == Direction.RIGHT:
-                    curr_pos.x += TurnCommand.D2
-                    curr_pos.y += TurnCommand.D1
+                    curr_pos.x += TurnCommand.fl2
+                    curr_pos.y += TurnCommand.fl1
                     curr_pos.direction = Direction.TOP
-                elif curr_pos.direction == Direction.BOTTOM:
-                    curr_pos.x += TurnCommand.D1
-                    curr_pos.y -= TurnCommand.D2
-                    curr_pos.direction = Direction.RIGHT
 
         # turn right and forward
         if self.right and not self.left and not self.reverse:
             if self.type_of_turn == TurnType.MEDIUM:
                 if curr_pos.direction == Direction.TOP:
-                    curr_pos.x += TurnCommand.D1
-                    curr_pos.y += TurnCommand.D2
+                    curr_pos.x += TurnCommand.fr1
+                    curr_pos.y += TurnCommand.fr2
                     curr_pos.direction = Direction.RIGHT
+                elif curr_pos.direction == Direction.BOTTOM:
+                    curr_pos.x -= TurnCommand.fr1
+                    curr_pos.y -= TurnCommand.fr2
+                    curr_pos.direction = Direction.LEFT
                 elif curr_pos.direction == Direction.LEFT:
-                    curr_pos.x -= TurnCommand.D2
-                    curr_pos.y += TurnCommand.D1
+                    curr_pos.x -= TurnCommand.fr2
+                    curr_pos.y += TurnCommand.fr1
                     curr_pos.direction = Direction.TOP
                 elif curr_pos.direction == Direction.RIGHT:
-                    curr_pos.x += TurnCommand.D2
-                    curr_pos.y -= TurnCommand.D1
+                    curr_pos.x += TurnCommand.fr2
+                    curr_pos.y -= TurnCommand.fr1
                     curr_pos.direction = Direction.BOTTOM
-                elif curr_pos.direction == Direction.BOTTOM:
-                    curr_pos.x -= TurnCommand.D1
-                    curr_pos.y -= TurnCommand.D2
-                    curr_pos.direction = Direction.LEFT
 
         # turn front wheels left and reverse
         if self.left and not self.right and self.reverse:
             if self.type_of_turn == TurnType.MEDIUM:
                 if curr_pos.direction == Direction.TOP:
-                    curr_pos.x -= TurnCommand.D2
-                    curr_pos.y -= TurnCommand.D1
+                    curr_pos.x -= TurnCommand.bl1
+                    curr_pos.y -= TurnCommand.bl2
                     curr_pos.direction = Direction.RIGHT
+                elif curr_pos.direction == Direction.BOTTOM:
+                    curr_pos.x += TurnCommand.bl1
+                    curr_pos.y += TurnCommand.bl2
+                    curr_pos.direction = Direction.LEFT
                 elif curr_pos.direction == Direction.LEFT:
-                    curr_pos.x += TurnCommand.D1
-                    curr_pos.y -= TurnCommand.D2
+                    curr_pos.x += TurnCommand.bl2
+                    curr_pos.y -= TurnCommand.bl1
                     curr_pos.direction = Direction.TOP
                 elif curr_pos.direction == Direction.RIGHT:
-                    curr_pos.x -= TurnCommand.D1
-                    curr_pos.y += TurnCommand.D2
+                    curr_pos.x -= TurnCommand.bl2
+                    curr_pos.y += TurnCommand.bl1
                     curr_pos.direction = Direction.BOTTOM
-                elif curr_pos.direction == Direction.BOTTOM:
-                    curr_pos.x += TurnCommand.D2
-                    curr_pos.y += TurnCommand.D1
-                    curr_pos.direction = Direction.LEFT
 
         # turn front wheels right and reverse
         if self.right and not self.left and self.reverse:
             if self.type_of_turn == TurnType.MEDIUM:
                 if curr_pos.direction == Direction.TOP:
-                    curr_pos.x += TurnCommand.D2
-                    curr_pos.y -= TurnCommand.D1
+                    curr_pos.x += TurnCommand.br1
+                    curr_pos.y -= TurnCommand.br2
                     curr_pos.direction = Direction.LEFT
+                elif curr_pos.direction == Direction.BOTTOM:
+                    curr_pos.x -= TurnCommand.br1
+                    curr_pos.y += TurnCommand.br2
+                    curr_pos.direction = Direction.RIGHT
                 elif curr_pos.direction == Direction.LEFT:
-                    curr_pos.x += TurnCommand.D1
-                    curr_pos.y += TurnCommand.D2
+                    curr_pos.x += TurnCommand.br2
+                    curr_pos.y += TurnCommand.br1
                     curr_pos.direction = Direction.BOTTOM
                 elif curr_pos.direction == Direction.RIGHT:
-                    curr_pos.x -= TurnCommand.D1
-                    curr_pos.y -= TurnCommand.D2
+                    curr_pos.x -= TurnCommand.br2
+                    curr_pos.y -= TurnCommand.br1
                     curr_pos.direction = Direction.TOP
-                elif curr_pos.direction == Direction.BOTTOM:
-                    curr_pos.x -= TurnCommand.D2
-                    curr_pos.y += TurnCommand.D1
-                    curr_pos.direction = Direction.RIGHT
 
         return self
+
+    # FR
+    # cmds = {'commands': 'B012,FR90,B006'}
+    # FL
+    # cmds = {'commands': 'FL90,B007'}
+    # BL
+    # cmds = {'commands': 'F005,BL90,B005'}
+    # BR
+    # cmds = {'commands': 'F012,BR90,B006'}
 
     def rpi_message(self):
         if self.left and not self.right and not self.reverse:
             if self.type_of_turn == TurnType.SMALL:
                 return "KF000"
             elif self.type_of_turn == TurnType.MEDIUM:
-                return "LF020"
+                return "LF090,SB007"
             elif self.type_of_turn == TurnType.LARGE:
                 return "LF180"
         elif self.left and not self.right and self.reverse:
             if self.type_of_turn == TurnType.SMALL:
                 return "KB000"
             elif self.type_of_turn == TurnType.MEDIUM:
-                return "LB020"
+                return "SF005,LB090,SB005"
             elif self.type_of_turn == TurnType.LARGE:
                 return "LB180"
         elif self.right and not self.left and not self.reverse:
             if self.type_of_turn == TurnType.SMALL:
                 return "JF000"
             elif self.type_of_turn == TurnType.MEDIUM:
-                return "RF020"
+                return "SB012,RF090,SB006"
             elif self.type_of_turn == TurnType.LARGE:
                 return "RF180"
         else:
             if self.type_of_turn == TurnType.SMALL:
                 return "JB000"
             elif self.type_of_turn == TurnType.MEDIUM:
-                return "RB020"
+                return "RB090"
             elif self.type_of_turn == TurnType.LARGE:
-                return "RB180"
+                return "SF012,RB180,SB006"

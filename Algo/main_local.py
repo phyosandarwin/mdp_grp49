@@ -3,12 +3,10 @@ import grid
 import constants
 import jsonParse
 import obstacle
-import math
 import socket
-import time
 from path_finding import hamiltonian
 from robot import robot
-from robot.position import Position, RobotPosition
+from robot.position import Position
 from robot.direction import Direction
 from buttons import draw_button, handle_button_click, visitedSquares, draw_text_button
 from run_algo import run_algo
@@ -25,12 +23,19 @@ pygame.display.set_caption("Simulation")
 
 # Create a Grid object
 obstacles = [
-    obstacle.Obstacle(screen, Position(80, 50, Direction.LEFT), 1),
-    obstacle.Obstacle(screen, Position(50, 120, Direction.BOTTOM), 2),
-    # obstacle.Obstacle(screen, Position(40, 180, Direction.BOTTOM), 3),
-    # obstacle.Obstacle(screen, Position(120, 150, Direction.RIGHT), 4),
-    # obstacle.Obstacle(screen, Position(150, 40, Direction.LEFT), 5),
-    # obstacle.Obstacle(screen, Position(190, 190, Direction.LEFT), 6),
+    obstacle.Obstacle(screen, Position(20, 150, Direction.BOTTOM), 1),
+    obstacle.Obstacle(screen, Position(80, 110, Direction.LEFT), 2),
+    obstacle.Obstacle(screen, Position(70, 10, Direction.TOP), 3),
+    obstacle.Obstacle(screen, Position(150, 30, Direction.LEFT), 4),
+]
+
+obstacles = [
+    obstacle.Obstacle(screen, Position(10, 180, Direction.BOTTOM), 1),
+    obstacle.Obstacle(screen, Position(60, 120, Direction.TOP), 2),
+    obstacle.Obstacle(screen, Position(100, 70, Direction.LEFT), 3),
+    obstacle.Obstacle(screen, Position(130, 20, Direction.RIGHT), 4),
+    obstacle.Obstacle(screen, Position(150, 160, Direction.BOTTOM), 5),
+    obstacle.Obstacle(screen, Position(190, 90, Direction.LEFT), 6),
 ]
 
 # # Create a Grid object
@@ -118,6 +123,10 @@ rpi_commands = {
 # adding coords_str
 def add_coords(command, dir):
     x, y = 0, 0
+    fr1, fr2 = 30, 10
+    fl1, fl2 = 30, 20
+    br1, br2 = 20, 30
+    bl1, bl2 = 30, 30
     if (command[:2]) == "SF":
         if dir == 0:
             y += int(command[2:])
@@ -138,62 +147,62 @@ def add_coords(command, dir):
             x += int(command[2:])
     elif (command[:2]) == "LF":
         if dir == 0:
-            x -= 40
-            y += 40
+            x -= fl1
+            y += fl2
         if dir == 1:
-            x += 40
-            y += 40
+            x += fl2
+            y += fl1
         if dir == 2:
-            x += 40
-            y -= 40
+            x += fl1
+            y -= fl2
         if dir == 3:
-            x -= 40
-            y -= 40
+            x -= fl2
+            y -= fl1
         dir -= 1
         dir %= 4
     elif (command[:2]) == "RF":
         if dir == 0:
-            x += 40
-            y += 40
+            x += fr1
+            y += fr2
         if dir == 1:
-            x += 40
-            y -= 40
+            x += fr2
+            y -= fr1
         if dir == 2:
-            x -= 40
-            y -= 40
+            x -= fr1
+            y -= fr2
         if dir == 3:
-            x -= 40
-            y += 40
+            x -= fr2
+            y += fr1
         dir += 1
         dir %= 4
     elif (command[:2]) == "LB":
         if dir == 0:
-            x -= 40
-            y -= 40
+            x -= bl1
+            y -= bl2
         if dir == 1:
-            x -= 40
-            y += 40
+            x -= bl2
+            y += bl1
         if dir == 2:
-            x += 40
-            y += 40
+            x += bl1
+            y += bl2
         if dir == 3:
-            x += 40
-            y -= 40
+            x += bl2
+            y -= bl1
         dir += 1
         dir %= 4
     elif (command[:2]) == "RB":
         if dir == 0:
-            x += 40
-            y -= 40
+            x += br1
+            y -= br2
         if dir == 1:
-            x -= 40
-            y -= 40
+            x -= br2
+            y -= br1
         if dir == 2:
-            x -= 40
-            y += 40
+            x -= br1
+            y += br2
         if dir == 3:
-            x += 40
-            y += 40
+            x += br2
+            y += br1
         dir -= 1
         dir %= 4
     return (x, y, dir)
