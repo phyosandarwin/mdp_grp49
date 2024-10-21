@@ -142,7 +142,41 @@ if __name__ == '__main__':
     img_folder = "/Users/cheongray/Y3S1/MDP/flask_test/object_upload_final"
     result_folder='results'
     json_folder='json_results'
+    name_to_id = { 
+            "1": 11, 
+            "2": 12, 
+            "3": 13, 
+            "4": 14, 
+            "5": 15, 
+            "6": 16, 
+            "7": 17, 
+            "8": 18, 
+            "9": 19, 
+            "A": 20, 
+            "B": 21, 
+            "C": 22, 
+            "D": 23, 
+            "E": 24, 
+            "F": 25, 
+            "G": 26, 
+            "H": 27, 
+            "S": 28, 
+            "T": 29, 
+            "U": 30, 
+            "V": 31, 
+            "W": 32, 
+            "X": 33, 
+            "Y": 34, 
+            "Z": 35, 
+            "bullseye": 10, 
+            "circle": 40, 
+            "down": 37, 
+            "left": 39,
+            "right": 38,  
+            "up": 36
+    }
     # class_names = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'bulleye', 'circle', 'down', 'eight', 'five', 'four', 'left', 'nine', 'one', 'right', 'seven', 'six', 'three', 'two', 'up']
-    class_names = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'bullseye', 'circle', 'down', 'left', 'right', 'up']
-    model_handler = yolo_model(model_path, img_folder,result_folder=RESULT_FOLDER,json_folder= JSON_FOLDER,class_names=class_names)
+    class_names = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'bullseye', 'up', 'down', 'right', 'left', 'circle']
+    # model_handler = yolo_model(model_path, img_folder,result_folder=RESULT_FOLDER,json_folder= JSON_FOLDER,class_names=class_names)
+    model_handler = yolo_model(model_path, img_folder,result_folder=RESULT_FOLDER,json_folder= JSON_FOLDER,name_id_dict = name_to_id)
     app.run(host='0.0.0.0', port=5055, debug=True)
