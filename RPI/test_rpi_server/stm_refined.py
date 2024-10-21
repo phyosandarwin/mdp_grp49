@@ -13,8 +13,23 @@ def send_message():
             # cmds = {'commands': 'FW050,BW050,ST000,TL070,FW010,RS050'}
             # cmds = {'commands': 'TL050,FW400'}
             # cmds = {'commands': 'FL90,FL90'}
-            cmds = {'commands': 'FR90'}
+            # cmds = {'commands': 'F002,FR20,F002'}
+            # BRcmds = {'commands': 'F005,BR90,B005'}
             # cmds = {'commands': 'FW200,ST000'}
+            # FR
+            # cmds = {'commands': 'B010,FR90,B012'}
+            # 30 20
+            # FL
+            cmds = {'commands': 'B030,F030,B030,FR05,FL050'}
+            # 30 20
+            # BL
+            # cmds = {'commands':'F005,BL90,B005'}
+            # 20 30
+            # BR
+            #cmds = {'commands': 'F013,BR90,B005'}
+            # 30 30
+            # cmds =  {'commands': 'F100,B100,F100,B100'}
+            # cmds = {'commands': 'S   '}
             # Create a queue
             command_queue = queue.Queue()
 
@@ -22,13 +37,14 @@ def send_message():
                 command_queue.put(command)
             while not command_queue.empty():
                 message = command_queue.get()
-            
+                time.sleep(3)
                 ser.write(message.encode('utf-8'))
                 print(f"Sent: {message}")
 
-            
-                time.sleep(5)
-                response = ser.readline().decode('utf-8').strip()
+                response = None
+                while response != 'ACK|':
+                    response = ser.readline().decode('utf-8').strip()
+                    print(response)
                 if response:
                     print(f"Received: {response}")
                 else:

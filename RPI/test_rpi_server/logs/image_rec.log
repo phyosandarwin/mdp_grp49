@@ -1,0 +1,264 @@
+2024-10-18 22:56:20,118 [DEBUG] RPiServer.image_rec: ============
+2024-10-18 22:56:20,119 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-18 22:56:20,119 [DEBUG] RPiServer.image_rec: Capturing image: obj_None_225620.jpg
+2024-10-18 22:56:22,463 [DEBUG] RPiServer.image_rec: Image captured at images/obj_None_225620.jpg
+2024-10-18 22:56:22,465 [DEBUG] RPiServer.image_rec: sending to http://10.96.49.30:5055/predict
+2024-10-18 22:56:22,833 [DEBUG] RPiServer.image_rec: Image images/obj_None_225620.jpg successfully sent to http://10.96.49.30:5055/predict
+2024-10-18 22:56:22,834 [DEBUG] RPiServer.image_rec: Bounding Boxes:[[514.2906494140625, 429.8919677734375, 648.0479736328125, 565.6912841796875]]
+2024-10-18 22:56:22,834 [DEBUG] RPiServer.image_rec: Confidence Scores:[0.936825156211853]
+2024-10-18 22:56:22,835 [DEBUG] RPiServer.image_rec: IMG-None-38
+2024-10-18 22:56:25,123 [DEBUG] RPiServer.image_rec: ============
+2024-10-18 22:56:25,124 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-18 22:56:25,124 [DEBUG] RPiServer.image_rec: Capturing image: obj_None_225625.jpg
+2024-10-18 22:56:27,475 [DEBUG] RPiServer.image_rec: Image captured at images/obj_None_225625.jpg
+2024-10-18 22:56:27,476 [DEBUG] RPiServer.image_rec: sending to http://10.96.49.30:5055/predict
+2024-10-18 22:56:27,894 [DEBUG] RPiServer.image_rec: Image images/obj_None_225625.jpg successfully sent to http://10.96.49.30:5055/predict
+2024-10-18 22:56:27,895 [DEBUG] RPiServer.image_rec: Bounding Boxes:[[858.37939453125, 419.6541748046875, 936.021484375, 500.2657470703125], [565.3211669921875, 418.24420166015625, 648.2186279296875, 497.713134765625], [260.5191650390625, 418.65228271484375, 339.9501953125, 500.25653076171875]]
+2024-10-18 22:56:27,895 [DEBUG] RPiServer.image_rec: Confidence Scores:[0.8903087377548218, 0.8816201686859131, 0.8338689804077148]
+2024-10-18 22:56:27,898 [DEBUG] RPiServer.image_rec: IMG-None-10
+2024-10-18 22:56:27,901 [DEBUG] RPiServer.image_rec: ============
+2024-10-18 22:56:27,902 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-18 22:56:27,903 [DEBUG] RPiServer.image_rec: Capturing image: obj_None_225627.jpg
+2024-10-18 22:56:30,214 [DEBUG] RPiServer.image_rec: Image captured at images/obj_None_225627.jpg
+2024-10-18 22:56:30,214 [DEBUG] RPiServer.image_rec: sending to http://10.96.49.30:5055/predict
+2024-10-18 22:56:30,578 [DEBUG] RPiServer.image_rec: Image images/obj_None_225627.jpg successfully sent to http://10.96.49.30:5055/predict
+2024-10-18 22:56:30,578 [DEBUG] RPiServer.image_rec: Bounding Boxes:[[0.0, 415.2255554199219, 93.33985137939453, 578.64501953125], [557.06298828125, 409.2222900390625, 708.046142578125, 569.1697998046875], [1123.77490234375, 409.894775390625, 1269.890380859375, 561.1832275390625]]
+2024-10-18 22:56:30,578 [DEBUG] RPiServer.image_rec: Confidence Scores:[0.9321106672286987, 0.9155972599983215, 0.9057707190513611]
+2024-10-18 22:56:30,579 [DEBUG] RPiServer.image_rec: IMG-None-10
+2024-10-18 22:56:30,580 [DEBUG] RPiServer.image_rec: ============
+2024-10-18 22:56:30,580 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-18 22:56:30,580 [DEBUG] RPiServer.image_rec: Capturing image: obj_None_225630.jpg
+2024-10-18 22:56:32,903 [DEBUG] RPiServer.image_rec: Image captured at images/obj_None_225630.jpg
+2024-10-18 22:56:32,904 [DEBUG] RPiServer.image_rec: sending to http://10.96.49.30:5055/predict
+2024-10-18 22:56:33,186 [DEBUG] RPiServer.image_rec: Image images/obj_None_225630.jpg successfully sent to http://10.96.49.30:5055/predict
+2024-10-18 22:56:33,187 [DEBUG] RPiServer.image_rec: Bounding Boxes:[[0.0, 415.26239013671875, 93.01102447509766, 578.3385620117188], [557.6226196289062, 409.5213623046875, 706.9124145507812, 570.177734375], [1120.67333984375, 408.2882080078125, 1269.693359375, 561.3917236328125]]
+2024-10-18 22:56:33,187 [DEBUG] RPiServer.image_rec: Confidence Scores:[0.9350681900978088, 0.9201172590255737, 0.8982155323028564]
+2024-10-18 22:56:33,188 [DEBUG] RPiServer.image_rec: IMG-None-10
+2024-10-18 22:56:33,191 [DEBUG] RPiServer.image_rec: ============
+2024-10-18 22:56:33,192 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-18 22:56:33,193 [DEBUG] RPiServer.image_rec: Capturing image: obj_None_225633.jpg
+2024-10-18 22:56:35,486 [DEBUG] RPiServer.image_rec: Image captured at images/obj_None_225633.jpg
+2024-10-18 22:56:35,487 [DEBUG] RPiServer.image_rec: sending to http://10.96.49.30:5055/predict
+2024-10-18 22:56:35,769 [DEBUG] RPiServer.image_rec: Image images/obj_None_225633.jpg successfully sent to http://10.96.49.30:5055/predict
+2024-10-18 22:56:35,769 [DEBUG] RPiServer.image_rec: Bounding Boxes:[[0.0, 414.9371643066406, 92.849853515625, 577.8128662109375], [557.4371337890625, 409.4647216796875, 705.9610595703125, 570.3475341796875], [1117.5164794921875, 405.51739501953125, 1270.3294677734375, 563.62158203125]]
+2024-10-18 22:56:35,769 [DEBUG] RPiServer.image_rec: Confidence Scores:[0.9288548827171326, 0.9224863052368164, 0.8903664350509644]
+2024-10-18 22:56:35,771 [DEBUG] RPiServer.image_rec: IMG-None-10
+2024-10-18 22:56:35,775 [DEBUG] RPiServer.image_rec: ============
+2024-10-18 22:56:35,775 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-18 22:56:35,776 [DEBUG] RPiServer.image_rec: Capturing image: obj_None_225635.jpg
+2024-10-18 22:56:38,116 [DEBUG] RPiServer.image_rec: Image captured at images/obj_None_225635.jpg
+2024-10-18 22:56:38,117 [DEBUG] RPiServer.image_rec: sending to http://10.96.49.30:5055/predict
+2024-10-18 22:56:38,416 [DEBUG] RPiServer.image_rec: Image images/obj_None_225635.jpg successfully sent to http://10.96.49.30:5055/predict
+2024-10-18 22:56:38,416 [DEBUG] RPiServer.image_rec: Bounding Boxes:[[0.0, 414.82733154296875, 93.13525390625, 579.1194458007812], [557.7530517578125, 410.30810546875, 705.6717529296875, 569.984619140625], [1121.0831298828125, 407.89154052734375, 1269.3751220703125, 561.2344970703125]]
+2024-10-18 22:56:38,417 [DEBUG] RPiServer.image_rec: Confidence Scores:[0.9343193769454956, 0.919406533241272, 0.8991708755493164]
+2024-10-18 22:56:38,418 [DEBUG] RPiServer.image_rec: IMG-None-10
+2024-10-18 22:56:38,420 [DEBUG] RPiServer.image_rec: ============
+2024-10-18 22:56:38,421 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-18 22:56:38,422 [DEBUG] RPiServer.image_rec: Capturing image: obj_None_225638.jpg
+2024-10-18 22:56:40,779 [DEBUG] RPiServer.image_rec: Image captured at images/obj_None_225638.jpg
+2024-10-18 22:56:40,780 [DEBUG] RPiServer.image_rec: sending to http://10.96.49.30:5055/predict
+2024-10-18 22:56:41,063 [DEBUG] RPiServer.image_rec: Image images/obj_None_225638.jpg successfully sent to http://10.96.49.30:5055/predict
+2024-10-18 22:56:41,064 [DEBUG] RPiServer.image_rec: Bounding Boxes:[[0.0, 413.90234375, 93.65641021728516, 577.27197265625], [557.99658203125, 410.2789306640625, 705.0130615234375, 570.2647705078125], [1120.123779296875, 407.16131591796875, 1269.4833984375, 560.5346069335938]]
+2024-10-18 22:56:41,064 [DEBUG] RPiServer.image_rec: Confidence Scores:[0.9360246658325195, 0.9199635982513428, 0.8984839916229248]
+2024-10-18 22:56:41,065 [DEBUG] RPiServer.image_rec: IMG-None-10
+2024-10-18 22:56:41,069 [DEBUG] RPiServer.image_rec: ============
+2024-10-18 22:56:41,070 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-18 22:56:41,070 [DEBUG] RPiServer.image_rec: Capturing image: obj_None_225641.jpg
+2024-10-18 22:56:43,406 [DEBUG] RPiServer.image_rec: Image captured at images/obj_None_225641.jpg
+2024-10-18 22:56:43,407 [DEBUG] RPiServer.image_rec: sending to http://10.96.49.30:5055/predict
+2024-10-18 22:56:43,721 [DEBUG] RPiServer.image_rec: Image images/obj_None_225641.jpg successfully sent to http://10.96.49.30:5055/predict
+2024-10-18 22:56:43,722 [DEBUG] RPiServer.image_rec: Bounding Boxes:[[0.0, 412.5561218261719, 96.07728576660156, 579.125732421875], [558.3489990234375, 409.8024597167969, 705.8568115234375, 569.25390625], [1122.619873046875, 408.0762939453125, 1269.30859375, 559.1443481445312]]
+2024-10-18 22:56:43,722 [DEBUG] RPiServer.image_rec: Confidence Scores:[0.9383085370063782, 0.9215183258056641, 0.9001266360282898]
+2024-10-18 22:56:43,723 [DEBUG] RPiServer.image_rec: IMG-None-10
+2024-10-18 22:56:43,727 [DEBUG] RPiServer.image_rec: ============
+2024-10-18 22:56:43,728 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-18 22:56:43,729 [DEBUG] RPiServer.image_rec: Capturing image: obj_None_225643.jpg
+2024-10-18 22:56:46,063 [DEBUG] RPiServer.image_rec: Image captured at images/obj_None_225643.jpg
+2024-10-18 22:56:46,064 [DEBUG] RPiServer.image_rec: sending to http://10.96.49.30:5055/predict
+2024-10-18 22:56:46,370 [DEBUG] RPiServer.image_rec: Image images/obj_None_225643.jpg successfully sent to http://10.96.49.30:5055/predict
+2024-10-18 22:56:46,372 [DEBUG] RPiServer.image_rec: Bounding Boxes:[[0.0, 410.8834228515625, 96.98316955566406, 579.734619140625], [557.9027709960938, 409.87060546875, 705.9163208007812, 570.2735595703125], [1120.4593505859375, 408.03753662109375, 1269.7801513671875, 559.7525024414062]]
+2024-10-18 22:56:46,372 [DEBUG] RPiServer.image_rec: Confidence Scores:[0.9360438585281372, 0.9225433468818665, 0.8938706517219543]
+2024-10-18 22:56:46,376 [DEBUG] RPiServer.image_rec: IMG-None-10
+2024-10-18 22:56:46,378 [DEBUG] RPiServer.image_rec: ============
+2024-10-18 22:56:46,379 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-18 22:56:46,380 [DEBUG] RPiServer.image_rec: Capturing image: obj_None_225646.jpg
+2024-10-18 22:56:48,716 [DEBUG] RPiServer.image_rec: Image captured at images/obj_None_225646.jpg
+2024-10-18 22:56:48,717 [DEBUG] RPiServer.image_rec: sending to http://10.96.49.30:5055/predict
+2024-10-18 22:56:48,988 [DEBUG] RPiServer.image_rec: Image images/obj_None_225646.jpg successfully sent to http://10.96.49.30:5055/predict
+2024-10-18 22:56:48,988 [DEBUG] RPiServer.image_rec: Bounding Boxes:[[0.0, 412.1835021972656, 96.55891418457031, 580.1666259765625], [557.3965454101562, 409.4055480957031, 705.8739624023438, 570.538330078125], [1121.8056640625, 407.87554931640625, 1269.90966796875, 559.642822265625]]
+2024-10-18 22:56:48,989 [DEBUG] RPiServer.image_rec: Confidence Scores:[0.9374834895133972, 0.921144425868988, 0.9013986587524414]
+2024-10-18 22:56:48,989 [DEBUG] RPiServer.image_rec: IMG-None-10
+2024-10-18 22:56:48,991 [DEBUG] RPiServer.image_rec: ============
+2024-10-18 22:56:48,992 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-18 22:56:48,992 [DEBUG] RPiServer.image_rec: Capturing image: obj_None_225648.jpg
+2024-10-18 22:56:51,339 [DEBUG] RPiServer.image_rec: Image captured at images/obj_None_225648.jpg
+2024-10-18 22:56:51,340 [DEBUG] RPiServer.image_rec: sending to http://10.96.49.30:5055/predict
+2024-10-18 22:56:51,600 [DEBUG] RPiServer.image_rec: Image images/obj_None_225648.jpg successfully sent to http://10.96.49.30:5055/predict
+2024-10-18 22:56:51,601 [DEBUG] RPiServer.image_rec: Bounding Boxes:[[0.0, 411.8932800292969, 95.91639709472656, 577.811767578125], [557.9254150390625, 408.92205810546875, 706.2105712890625, 569.9373168945312], [1121.9588623046875, 409.20806884765625, 1269.3192138671875, 558.9290771484375]]
+2024-10-18 22:56:51,601 [DEBUG] RPiServer.image_rec: Confidence Scores:[0.938907265663147, 0.9178192019462585, 0.8974927663803101]
+2024-10-18 22:56:51,602 [DEBUG] RPiServer.image_rec: IMG-None-10
+2024-10-18 22:56:51,606 [DEBUG] RPiServer.image_rec: Removed obj_None_225620.jpg from images
+2024-10-18 22:56:51,607 [DEBUG] RPiServer.image_rec: ============
+2024-10-18 22:56:51,608 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-18 22:56:51,608 [DEBUG] RPiServer.image_rec: Capturing image: obj_None_225651.jpg
+2024-10-18 22:56:53,928 [DEBUG] RPiServer.image_rec: Image captured at images/obj_None_225651.jpg
+2024-10-18 22:56:53,930 [DEBUG] RPiServer.image_rec: sending to http://10.96.49.30:5055/predict
+2024-10-18 22:56:54,225 [DEBUG] RPiServer.image_rec: Image images/obj_None_225651.jpg successfully sent to http://10.96.49.30:5055/predict
+2024-10-18 22:56:54,226 [DEBUG] RPiServer.image_rec: Bounding Boxes:[[0.0, 412.01336669921875, 96.1976318359375, 577.6917114257812], [557.928955078125, 409.0041809082031, 706.611083984375, 570.3466796875], [1123.29833984375, 409.74029541015625, 1269.4072265625, 558.2072143554688]]
+2024-10-18 22:56:54,226 [DEBUG] RPiServer.image_rec: Confidence Scores:[0.9386842250823975, 0.9219014644622803, 0.9010240435600281]
+2024-10-18 22:56:54,227 [DEBUG] RPiServer.image_rec: IMG-None-10
+2024-10-18 22:56:54,232 [DEBUG] RPiServer.image_rec: Removed obj_None_225625.jpg from images
+2024-10-18 22:56:54,234 [DEBUG] RPiServer.image_rec: ============
+2024-10-18 22:56:54,235 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-18 22:56:54,236 [DEBUG] RPiServer.image_rec: Capturing image: obj_None_225654.jpg
+2024-10-18 22:56:56,579 [DEBUG] RPiServer.image_rec: Image captured at images/obj_None_225654.jpg
+2024-10-18 22:56:56,580 [DEBUG] RPiServer.image_rec: sending to http://10.96.49.30:5055/predict
+2024-10-18 22:56:56,839 [DEBUG] RPiServer.image_rec: Image images/obj_None_225654.jpg successfully sent to http://10.96.49.30:5055/predict
+2024-10-18 22:56:56,840 [DEBUG] RPiServer.image_rec: Bounding Boxes:[[0.0, 411.53118896484375, 96.58963012695312, 580.3652954101562], [557.8409423828125, 409.3155822753906, 705.9462890625, 570.1116943359375], [1121.1407470703125, 409.2357177734375, 1269.7816162109375, 561.884521484375]]
+2024-10-18 22:56:56,840 [DEBUG] RPiServer.image_rec: Confidence Scores:[0.9366199374198914, 0.9198253750801086, 0.8993410468101501]
+2024-10-18 22:56:56,842 [DEBUG] RPiServer.image_rec: IMG-None-10
+2024-10-18 22:56:56,848 [DEBUG] RPiServer.image_rec: Removed obj_None_225627.jpg from images
+2024-10-18 22:56:56,849 [DEBUG] RPiServer.image_rec: ============
+2024-10-18 22:56:56,850 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-18 22:56:56,851 [DEBUG] RPiServer.image_rec: Capturing image: obj_None_225656.jpg
+2024-10-18 22:56:59,174 [DEBUG] RPiServer.image_rec: Image captured at images/obj_None_225656.jpg
+2024-10-18 22:56:59,174 [DEBUG] RPiServer.image_rec: sending to http://10.96.49.30:5055/predict
+2024-10-18 22:56:59,413 [DEBUG] RPiServer.image_rec: Image images/obj_None_225656.jpg successfully sent to http://10.96.49.30:5055/predict
+2024-10-18 22:56:59,413 [DEBUG] RPiServer.image_rec: Bounding Boxes:[[0.0, 411.8431396484375, 96.08966827392578, 580.7008056640625], [557.5371704101562, 409.636474609375, 704.9009399414062, 569.6888427734375], [1123.022216796875, 409.406982421875, 1269.645751953125, 558.817138671875]]
+2024-10-18 22:56:59,413 [DEBUG] RPiServer.image_rec: Confidence Scores:[0.9370589852333069, 0.9210506677627563, 0.9032911062240601]
+2024-10-18 22:56:59,413 [DEBUG] RPiServer.image_rec: IMG-None-10
+2024-10-18 22:56:59,415 [DEBUG] RPiServer.image_rec: Removed obj_None_225630.jpg from images
+2024-10-18 22:56:59,416 [DEBUG] RPiServer.image_rec: ============
+2024-10-18 22:56:59,416 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-18 22:56:59,416 [DEBUG] RPiServer.image_rec: Capturing image: obj_None_225659.jpg
+2024-10-18 22:57:01,764 [DEBUG] RPiServer.image_rec: Image captured at images/obj_None_225659.jpg
+2024-10-18 22:57:01,766 [DEBUG] RPiServer.image_rec: sending to http://10.96.49.30:5055/predict
+2024-10-18 22:57:02,051 [DEBUG] RPiServer.image_rec: Image images/obj_None_225659.jpg successfully sent to http://10.96.49.30:5055/predict
+2024-10-18 22:57:02,052 [DEBUG] RPiServer.image_rec: Bounding Boxes:[[0.0, 411.951416015625, 96.17253875732422, 579.05126953125], [557.5618896484375, 409.4147644042969, 705.4215087890625, 570.506103515625], [1121.03076171875, 408.11419677734375, 1270.162109375, 561.368896484375]]
+2024-10-18 22:57:02,052 [DEBUG] RPiServer.image_rec: Confidence Scores:[0.9372645020484924, 0.9220746159553528, 0.8981690406799316]
+2024-10-18 22:57:02,054 [DEBUG] RPiServer.image_rec: IMG-None-10
+2024-10-18 22:57:02,058 [DEBUG] RPiServer.image_rec: Removed obj_None_225633.jpg from images
+2024-10-18 22:57:02,059 [DEBUG] RPiServer.image_rec: ============
+2024-10-18 22:57:02,059 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-18 22:57:02,060 [DEBUG] RPiServer.image_rec: Capturing image: obj_None_225702.jpg
+2024-10-18 22:57:04,385 [DEBUG] RPiServer.image_rec: Image captured at images/obj_None_225702.jpg
+2024-10-18 22:57:04,386 [DEBUG] RPiServer.image_rec: sending to http://10.96.49.30:5055/predict
+2024-10-18 22:57:04,648 [DEBUG] RPiServer.image_rec: Image images/obj_None_225702.jpg successfully sent to http://10.96.49.30:5055/predict
+2024-10-18 22:57:04,649 [DEBUG] RPiServer.image_rec: Bounding Boxes:[[0.0, 411.6973876953125, 95.9973373413086, 580.0225830078125], [557.46435546875, 409.4667053222656, 705.38330078125, 570.5303955078125], [1123.36181640625, 408.90643310546875, 1269.539306640625, 558.1970825195312]]
+2024-10-18 22:57:04,649 [DEBUG] RPiServer.image_rec: Confidence Scores:[0.9378535151481628, 0.9217709898948669, 0.9066830277442932]
+2024-10-18 22:57:04,650 [DEBUG] RPiServer.image_rec: IMG-None-10
+2024-10-18 22:57:04,654 [DEBUG] RPiServer.image_rec: Removed obj_None_225635.jpg from images
+2024-10-18 22:57:04,654 [DEBUG] RPiServer.image_rec: ============
+2024-10-18 22:57:04,654 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-18 22:57:04,655 [DEBUG] RPiServer.image_rec: Capturing image: obj_None_225704.jpg
+2024-10-18 22:57:06,974 [DEBUG] RPiServer.image_rec: Image captured at images/obj_None_225704.jpg
+2024-10-18 22:57:06,974 [DEBUG] RPiServer.image_rec: sending to http://10.96.49.30:5055/predict
+2024-10-18 22:57:07,496 [DEBUG] RPiServer.image_rec: Image images/obj_None_225704.jpg successfully sent to http://10.96.49.30:5055/predict
+2024-10-18 22:57:07,497 [DEBUG] RPiServer.image_rec: Bounding Boxes:[[0.0, 411.224853515625, 96.98068237304688, 580.9205322265625], [557.51220703125, 409.66595458984375, 705.259033203125, 569.4401245117188], [1122.042236328125, 408.38092041015625, 1270.021728515625, 560.4251708984375]]
+2024-10-18 22:57:07,497 [DEBUG] RPiServer.image_rec: Confidence Scores:[0.9375190138816833, 0.9231140613555908, 0.9000036120414734]
+2024-10-18 22:57:07,498 [DEBUG] RPiServer.image_rec: IMG-None-10
+2024-10-18 22:57:07,503 [DEBUG] RPiServer.image_rec: Removed obj_None_225638.jpg from images
+2024-10-18 22:57:07,504 [DEBUG] RPiServer.image_rec: ============
+2024-10-18 22:57:07,505 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-18 22:57:07,506 [DEBUG] RPiServer.image_rec: Capturing image: obj_None_225707.jpg
+2024-10-18 22:57:09,831 [DEBUG] RPiServer.image_rec: Image captured at images/obj_None_225707.jpg
+2024-10-18 22:57:09,832 [DEBUG] RPiServer.image_rec: sending to http://10.96.49.30:5055/predict
+2024-10-18 22:57:10,103 [DEBUG] RPiServer.image_rec: Image images/obj_None_225707.jpg successfully sent to http://10.96.49.30:5055/predict
+2024-10-18 22:57:10,104 [DEBUG] RPiServer.image_rec: Bounding Boxes:[[0.0, 412.2229309082031, 96.41314697265625, 581.16259765625], [557.543701171875, 409.537841796875, 705.8701171875, 570.2882080078125], [1122.8818359375, 409.34173583984375, 1269.7509765625, 559.6492309570312]]
+2024-10-18 22:57:10,104 [DEBUG] RPiServer.image_rec: Confidence Scores:[0.9412307739257812, 0.9215990304946899, 0.9051204323768616]
+2024-10-18 22:57:10,106 [DEBUG] RPiServer.image_rec: IMG-None-10
+2024-10-18 22:57:10,111 [DEBUG] RPiServer.image_rec: Removed obj_None_225641.jpg from images
+2024-10-18 22:57:10,112 [DEBUG] RPiServer.image_rec: ============
+2024-10-18 22:57:10,113 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-18 22:57:10,114 [DEBUG] RPiServer.image_rec: Capturing image: obj_None_225710.jpg
+2024-10-18 22:57:12,465 [DEBUG] RPiServer.image_rec: Image captured at images/obj_None_225710.jpg
+2024-10-18 22:57:12,465 [DEBUG] RPiServer.image_rec: sending to http://10.96.49.30:5055/predict
+2024-10-18 22:57:12,747 [DEBUG] RPiServer.image_rec: Image images/obj_None_225710.jpg successfully sent to http://10.96.49.30:5055/predict
+2024-10-18 22:57:12,747 [DEBUG] RPiServer.image_rec: Bounding Boxes:[[0.0, 411.8301696777344, 96.49909973144531, 582.1622314453125], [558.5517578125, 408.4051208496094, 707.206298828125, 569.7022705078125], [1121.224609375, 408.1871337890625, 1270.0, 558.141845703125]]
+2024-10-18 22:57:12,748 [DEBUG] RPiServer.image_rec: Confidence Scores:[0.935834527015686, 0.9214838147163391, 0.8949524760246277]
+2024-10-18 22:57:12,749 [DEBUG] RPiServer.image_rec: IMG-None-10
+2024-10-18 22:57:12,753 [DEBUG] RPiServer.image_rec: Removed obj_None_225643.jpg from images
+2024-10-18 22:57:12,754 [DEBUG] RPiServer.image_rec: ============
+2024-10-18 22:57:12,755 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-18 22:57:12,756 [DEBUG] RPiServer.image_rec: Capturing image: obj_None_225712.jpg
+2024-10-18 22:57:15,088 [DEBUG] RPiServer.image_rec: Image captured at images/obj_None_225712.jpg
+2024-10-18 22:57:15,090 [DEBUG] RPiServer.image_rec: sending to http://10.96.49.30:5055/predict
+2024-10-18 22:57:15,393 [DEBUG] RPiServer.image_rec: Image images/obj_None_225712.jpg successfully sent to http://10.96.49.30:5055/predict
+2024-10-18 22:57:15,393 [DEBUG] RPiServer.image_rec: Bounding Boxes:[[0.0, 411.8959655761719, 95.65718078613281, 578.868896484375], [558.63232421875, 408.8843994140625, 706.2950439453125, 569.778076171875], [1118.185546875, 406.36895751953125, 1270.87255859375, 566.4951171875]]
+2024-10-18 22:57:15,393 [DEBUG] RPiServer.image_rec: Confidence Scores:[0.9358319044113159, 0.9202492833137512, 0.8871884346008301]
+2024-10-18 22:57:15,394 [DEBUG] RPiServer.image_rec: IMG-None-10
+2024-10-18 22:57:15,396 [DEBUG] RPiServer.image_rec: Removed obj_None_225646.jpg from images
+2024-10-18 22:57:15,397 [DEBUG] RPiServer.image_rec: ============
+2024-10-18 22:57:15,397 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-18 22:57:15,397 [DEBUG] RPiServer.image_rec: Capturing image: obj_None_225715.jpg
+2024-10-18 22:57:17,744 [DEBUG] RPiServer.image_rec: Image captured at images/obj_None_225715.jpg
+2024-10-18 22:57:17,746 [DEBUG] RPiServer.image_rec: sending to http://10.96.49.30:5055/predict
+2024-10-18 22:57:17,992 [DEBUG] RPiServer.image_rec: Image images/obj_None_225715.jpg successfully sent to http://10.96.49.30:5055/predict
+2024-10-18 22:57:17,993 [DEBUG] RPiServer.image_rec: Bounding Boxes:[[0.0, 413.221923828125, 93.89239501953125, 578.763916015625], [558.0870361328125, 409.29705810546875, 706.019287109375, 570.3626098632812], [1124.573486328125, 410.2147216796875, 1269.306396484375, 557.5781860351562]]
+2024-10-18 22:57:17,994 [DEBUG] RPiServer.image_rec: Confidence Scores:[0.9220889210700989, 0.9177470207214355, 0.9026375412940979]
+2024-10-18 22:57:17,994 [DEBUG] RPiServer.image_rec: IMG-None-10
+2024-10-18 22:57:18,001 [DEBUG] RPiServer.image_rec: Removed obj_None_225648.jpg from images
+2024-10-18 22:57:18,002 [DEBUG] RPiServer.image_rec: ============
+2024-10-18 22:57:18,004 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-18 22:57:18,004 [DEBUG] RPiServer.image_rec: Capturing image: obj_None_225718.jpg
+2024-10-18 22:57:20,300 [DEBUG] RPiServer.image_rec: Image captured at images/obj_None_225718.jpg
+2024-10-18 22:57:20,300 [DEBUG] RPiServer.image_rec: sending to http://10.96.49.30:5055/predict
+2024-10-18 22:57:20,881 [DEBUG] RPiServer.image_rec: Image images/obj_None_225718.jpg successfully sent to http://10.96.49.30:5055/predict
+2024-10-18 22:57:20,882 [DEBUG] RPiServer.image_rec: Bounding Boxes:[[0.0, 411.7384033203125, 96.22880554199219, 579.4503173828125], [558.4000244140625, 408.94036865234375, 706.0626220703125, 569.9640502929688], [1124.82275390625, 411.66357421875, 1270.3505859375, 558.749755859375]]
+2024-10-18 22:57:20,882 [DEBUG] RPiServer.image_rec: Confidence Scores:[0.9384002685546875, 0.9148974418640137, 0.9089216589927673]
+2024-10-18 22:57:20,882 [DEBUG] RPiServer.image_rec: IMG-None-10
+2024-10-18 22:57:20,885 [DEBUG] RPiServer.image_rec: Removed obj_None_225651.jpg from images
+2024-10-18 22:57:20,886 [DEBUG] RPiServer.image_rec: ============
+2024-10-18 22:57:20,886 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-18 22:57:20,886 [DEBUG] RPiServer.image_rec: Capturing image: obj_None_225720.jpg
+2024-10-18 22:57:23,235 [DEBUG] RPiServer.image_rec: Image captured at images/obj_None_225720.jpg
+2024-10-18 22:57:23,236 [DEBUG] RPiServer.image_rec: sending to http://10.96.49.30:5055/predict
+2024-10-18 22:57:23,631 [DEBUG] RPiServer.image_rec: Image images/obj_None_225720.jpg successfully sent to http://10.96.49.30:5055/predict
+2024-10-18 22:57:23,631 [DEBUG] RPiServer.image_rec: Bounding Boxes:[[0.0, 411.9535827636719, 96.98725891113281, 579.593017578125], [557.51904296875, 408.7701416015625, 706.387939453125, 570.454833984375], [1121.5517578125, 411.01580810546875, 1270.363525390625, 561.7227783203125]]
+2024-10-18 22:57:23,632 [DEBUG] RPiServer.image_rec: Confidence Scores:[0.9331429600715637, 0.9189718961715698, 0.8875463604927063]
+2024-10-18 22:57:23,633 [DEBUG] RPiServer.image_rec: IMG-None-10
+2024-10-18 22:57:23,638 [DEBUG] RPiServer.image_rec: Removed obj_None_225654.jpg from images
+2024-10-18 22:57:23,639 [DEBUG] RPiServer.image_rec: ============
+2024-10-18 22:57:23,640 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-18 22:57:23,641 [DEBUG] RPiServer.image_rec: Capturing image: obj_None_225723.jpg
+2024-10-18 22:57:25,916 [DEBUG] RPiServer.image_rec: Image captured at images/obj_None_225723.jpg
+2024-10-18 22:57:25,918 [DEBUG] RPiServer.image_rec: sending to http://10.96.49.30:5055/predict
+2024-10-18 22:57:26,159 [DEBUG] RPiServer.image_rec: Image images/obj_None_225723.jpg successfully sent to http://10.96.49.30:5055/predict
+2024-10-18 22:57:26,159 [DEBUG] RPiServer.image_rec: Bounding Boxes:[[557.9339599609375, 408.8314208984375, 706.1722412109375, 569.89013671875], [1122.64501953125, 410.8016357421875, 1270.61572265625, 563.105224609375], [0.0, 413.85693359375, 95.56720733642578, 578.9188232421875]]
+2024-10-18 22:57:26,159 [DEBUG] RPiServer.image_rec: Confidence Scores:[0.9190096259117126, 0.9091290235519409, 0.8958163857460022]
+2024-10-18 22:57:26,160 [DEBUG] RPiServer.image_rec: IMG-None-38
+2024-10-18 22:57:26,162 [DEBUG] RPiServer.image_rec: Removed obj_None_225656.jpg from images
+2024-10-18 22:57:27,167 [DEBUG] RPiServer.image_rec: ============
+2024-10-18 22:57:27,167 [DEBUG] RPiServer.image_rec: IMG RECOGNITION
+
+2024-10-18 22:57:27,168 [DEBUG] RPiServer.image_rec: Capturing image: obj_None_225727.jpg
+2024-10-18 22:57:29,513 [DEBUG] RPiServer.image_rec: Image captured at images/obj_None_225727.jpg
+2024-10-18 22:57:29,513 [DEBUG] RPiServer.image_rec: sending to http://10.96.49.30:5055/predict
+2024-10-18 22:57:29,697 [DEBUG] RPiServer.image_rec: Image images/obj_None_225727.jpg successfully sent to http://10.96.49.30:5055/predict
+2024-10-18 22:57:29,697 [DEBUG] RPiServer.image_rec: Bounding Boxes:None
+2024-10-18 22:57:29,698 [DEBUG] RPiServer.image_rec: Confidence Scores:None
+2024-10-18 22:57:29,702 [DEBUG] RPiServer.image_rec: Removed obj_None_225659.jpg from images

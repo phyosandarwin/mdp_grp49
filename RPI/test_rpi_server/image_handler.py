@@ -10,9 +10,15 @@ class CameraHandler:
         # Initialize the PiCamera
         print('initiliasing camera')
         self.camera = PiCamera()
+        # configure brightness contrast settings according to the current levels
+        self.camera.contrast = 25
+        self.camera.brightness = 75
+        # self.camera.iso = 500
+        self.camera.exposure_mode = 'backlight'
         self.image_storage  = images_folder
         if not os.path.exists( self.image_storage ):
             os.makedirs( self.image_storage )
+    
     def maintain_recent_images(self):
         """Keeps only the  most recent images in the image storage folder."""
         images = sorted(os.listdir(self.image_storage), key=lambda x: os.path.getctime(os.path.join(self.image_storage, x)))
@@ -20,6 +26,7 @@ class CameraHandler:
             for image in images[:-self.MAX_IMAGES]:
                 print(f'remving image :{image}')
                 os.remove(os.path.join(self.image_storage, image))
+    
     def take_picture(self, filename):
         try:
             filepath = os.path.join(self.image_storage,filename)

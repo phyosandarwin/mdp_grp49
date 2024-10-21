@@ -16,7 +16,8 @@ import socket
 from algo_handler import AlgoHandler
 import json
 from collections import Counter
-
+import glob
+#48:61:EE:2A:AA:04
 os.makedirs('logs', exist_ok=True)
 # Configure logging
 logging.basicConfig(
@@ -32,6 +33,7 @@ class RPiServer:
     def __init__(self, image_folder=Config.IMAGE_FOLDER, results_folder=Config.RESULTS_FOLDER, max_images=Config.MAX_IMAGES, captured_image_wait=Config.CAPTURED_IMAGE_WAIT):
         self.logger = logging.getLogger(self.__class__.__name__)
         
+
         self.image_folder = image_folder
         self.results_folder = results_folder
         self.max_images = max_images
@@ -58,7 +60,7 @@ class RPiServer:
         except Exception as e:
             self.camera = None
             self.camera_initialized = False
-            self.logger.error(f"Failed to initialize camera: {e}")
+            # self.logger.error(f"Failed to initialize camera: {e}")
         # Initialize Bluetooth communication
         self.bt_comm = BluetoothComm()
 
@@ -105,9 +107,28 @@ class RPiServer:
         self.task1_logger.addHandler(task1_handler)
         self.task1_logger.propagate = False  # Prevent logging from propagating to the main logger
 
+        # Create separate logger for task_2()
+        self.task2_logger = logging.getLogger(f"{self.__class__.__name__}.task2")
+        self.task2_logger.setLevel(logging.DEBUG)
+        task2_handler = logging.FileHandler("./logs/task2.log")
+        task2_formatter = logging.Formatter('%(asctime)s [%(levelname)s] %(name)s: %(message)s')
+        task2_handler.setFormatter(task2_formatter)
+        self.task2_logger.addHandler(task2_handler)
+        self.task2_logger.propagate = False  # Prevent logging from propagating to the main logger
+
+        self.predict_image_result = None
 
 
-        self.predict_image_result =None
+        images_path = '/home/pi/test_rpi_server_2/mdp_grp49/RPI/test_rpi_server/images'
+        files = glob.glob(os.path.join(images_path,'*'))
+
+        for file in files:
+            try:
+                os.remove(file)
+                print(f"Deleted{file}")
+            except Exception as e:
+                print(e)
+
     def clear_log_files(self):
         """Clear the contents of all log files during initialization."""
         log_files = [
@@ -167,7 +188,8 @@ class RPiServer:
                 os.remove(os.path.join(folder, image))
                 # print(f"Removed {image} from {folder}")
                 self.image_rec_logger.debug(f"Removed {image} from {folder}")
-    def send_image_to_server(self, filename, mock=False,obj_id_int=None):
+
+    def post_image_to_server(self, filename, mock=False,obj_id_int=None):
         retry_times = 0
 
         while retry_times < self.retry_send_max:
@@ -179,7 +201,7 @@ class RPiServer:
                     mock_response = {
                         'boxes': [],
                         'confidence': [],
-                        'class_name': 'MockClass'
+                        'class_ids': 'MockClass'
                     }
                     self.process_server_response(mock_response, filename, obj_id_int)
                     break  # Exit loop if successful
@@ -199,6 +221,57 @@ class RPiServer:
                         # Flatten the JSON data for the form-data structure
                         data = {key: str(value) for key, value in payload.items()}
 
+                        _ = requests.post(self.predict_url, files=files, data=data)
+                        return
+
+                        if response.status_code == 200:
+                            json_response = response.json()
+                            self.process_server_response(json_response, filename , obj_id_int)
+                            break  # Exit loop if successful
+                        else:
+                            print(f"Failed to send image. Status code: {response.status_code}. Retrying in {self.retry_delay} seconds...")
+
+            except requests.ConnectionError:
+                response = requests.post(f"http://{self.master_ip_address}:5055/status")
+                print("response from flask",response)
+                print(f"Connection error occurred while sending {filename}. Retrying in {self.retry_delay} seconds... {retry_times}/{self.retry_send_max}")
+
+            time.sleep(self.retry_delay)
+
+    def send_image_to_server(self, filename, mock=False,obj_id_int=None):
+        retry_times = 0
+
+        while retry_times < self.retry_send_max:
+            try:
+                retry_times += 1
+                if mock:
+                    # Simulate server response for mock image
+                    print(f"Simulating sending mock image to {self.predict_url}")
+                    mock_response = {
+                        'boxes': [],
+                        'confidence': [],
+                        'class_ids': 'MockClass'
+                    }
+                    self.process_server_response(mock_response, filename, obj_id_int)
+                    break  # Exit loop if successful
+                else:
+                    with open(filename, 'rb') as img_file:
+                        # Example of the additional JSON payload
+                        payload = {
+                            'request_id': obj_id_int,  # Replace with actual data if needed
+                            'additional_info': 'Sample information'  # Example JSON body
+                        }
+
+                        # Log that the request is being sent
+                        self.image_rec_logger.debug(f"sending to {self.predict_url}")
+
+                        # Sending both the image file and the JSON payload
+                        files = {'file': img_file}
+                        # Flatten the JSON data for the form-data structure
+                        data = {key: str(value) for key, value in payload.items()}
+
+    #                    _ = requests.post(self.predict_url, files=files, data=data)
+    #                    return
                         response = requests.post(self.predict_url, files=files, data=data)
 
                         if response.status_code == 200:
@@ -215,7 +288,6 @@ class RPiServer:
 
             time.sleep(self.retry_delay)
 
-
     def process_server_response(self, json_response, filename,obj_id_int=None):
         """Process the server response and send relevant information via Bluetooth."""
         if 'boxes' in json_response and 'confidence' in json_response:
@@ -227,18 +299,27 @@ class RPiServer:
             self.image_rec_logger.debug(f"Image {filename} successfully sent to {self.predict_url}")
             self.image_rec_logger.debug(f"Bounding Boxes:{json_response['boxes']}")
             self.image_rec_logger.debug(f"Confidence Scores:{result_conf}")
-
-            if 'class_name' in json_response:  # Send only when class name is identified
-                result_class_name = json_response['class_name']
+            print("JSON RESPONSE", json_response)
+            print("None type", )
+            if 'class_ids' in json_response:  # Send only when class name is identified
+                result_class_name = json_response['class_ids'][0]#get first prediction
                 self.predict_image_result = result_class_name
                 # print(f"class name = {result_class_name}")
-                result_send = f'IMG-{obj_id_int}-{result_class_name}'#unhardcode this
-
-
-                self.image_rec_logger.debug("unhardcode this in the future")
+                result_send = f'IMG-{obj_id_int}-{result_class_name}'
                 self.image_rec_logger.debug(result_send)
-                self.bt_comm.send_message(result_send)
+                if obj_id_int is None:
+                    print('result_send is]]]')
+                    print(result_send)
+                    if result_class_name == 10:
+                         pass
+                else:
+                    print(f"=====SENDING IMAGE PREDICITON TO ANDROID{result_send}=====")
+                    if result_class_name == 10:
+                         pass
+                    else:
+                        self.bt_comm.send_message(result_send)
         else:
+            print("NO CLASS ID IN RESULT SEND")
             # print(f"Plain Image {filename}successfully sent, but 'boxes' or 'confidence' not found in the response.")
             self.image_rec_logger.debug(f"Plain Image {filename}successfully sent, but 'boxes' or 'confidence' not found in the response.")
             self.bt_comm.send_message(f"image taken no bounding boxes found for {obj_id_int}")
@@ -270,7 +351,7 @@ class RPiServer:
             filename = f"obj_{obj_id_int}_{time.strftime('%H%M%S')}.jpg"
             # print(f"Capturing image: {filename}")
             self.image_rec_logger.debug(f"Capturing image: {filename}")
-            self.bt_comm.send_message(f"image taken for {obj_id_int}")
+            # self.bt_comm.send_message(f"image taken for {obj_id_int}")
 
             # Check if image recognition is paused
             if not self.bt_comm.stop_image_rec:
@@ -280,11 +361,10 @@ class RPiServer:
                     print(f"Image captured at {filepath}")
                     self.image_rec_logger.debug(f"Image captured at {filepath}")
 
+                    self.send_image_to_server(filepath,mock=False,obj_id_int = obj_id_int)
+
                     # Maintain a fixed number of recent images
                     self.maintain_recent_images(self.image_folder)
-
-                    # Send the image to the server
-                    self.send_image_to_server(filepath,mock=False,obj_id_int = obj_id_int)
                 except Exception as e:
                     print(f"Error during image capture: {e} {self.master_ip_address}")
                     self.image_rec_logger.error(f"Error during image capture: {e}")
@@ -310,6 +390,7 @@ class RPiServer:
 
             # Optionally, simulate waiting time
             time.sleep(self.captured_image_wait)
+    
     def process_android_data_for_algo(self,android_data,category="category",mode="0"):
         processed_data = []
 
@@ -364,6 +445,7 @@ class RPiServer:
         # print("STM_Controller thread completed.")   
     
     def task_1(self):
+        self.bt_comm.stop_image_rec=False
         print('task 1 start...setting task_finish to false')
         self.task_finshed = False
         android_data = self.bt_comm.android_info
@@ -392,8 +474,8 @@ class RPiServer:
         # print('===running stm=====')
         # self.start_stm(formatted_cmds)
         if self.algo_handler.conn:
-            pass
-
+            print("CONNECTION WITH ALGO'S SOCKET")
+        # requests.post(self.algo_url,android_data)
         #hardcode here first try
         # message = """{"cat":"obstacles","value":{"obstacles":[{"x":7,"y":14,"id":1,"d":0},{"x":15,"y":8,"id":2,"d":6},{"x":4,"y":3,"id":3,"d":2},{"x":9,"y":7,"id":4,"d":4}],"mode":"0"}}"""
         #dont proceed until connected to algo computer
@@ -412,7 +494,6 @@ class RPiServer:
             print(e)
         
         self.algo_handler.send_external_message(message)
-        requests
         self.task1_logger.debug(f"Sent message to AlgoHandler: {message}")
         print(f"Sent message to AlgoHandler: {message}")
 
@@ -422,13 +503,15 @@ class RPiServer:
 
         # Handle the received message
         while not received_message:
-            print('waiting for response from algo')
-            time.sleep(5)#give some buffer for algo to compute
+            print(f'waiting for response from algo{received_message}')
+            #time.sleep(5)#give some buffer for algo to compute
             received_message = self.algo_handler.receive_message()
-            time.sleep(3)
+            #time.sleep(3)
             self.algo_handler.send_external_message(message)
         
         try:
+            print("RECEIVED MESSAGE")
+            print(received_message)
             received_data = json.loads(received_message)
             print("Parsed received data:", received_data)
 
@@ -444,16 +527,18 @@ class RPiServer:
         #use algo send to stm
         # robot_commands = response_algo.json()['commands']#just take the 'commands key
         robot_commands = received_data['value']['commands']
-        car_coords = received_data['value']['coords']
+        # car_coords = received_data['value']['coords']
+        # car_coords = None
         print("======")
-        print(car_coords)
+        #print(car_coords)
         send_coords = []
         print(self.stm_to_rpi_queue)
-        for coord in car_coords:
+        
+        #for coord in car_coords:
             # self.bt_comm.send_message(",".join(car_coords[i]))
-            send = "UPDATE-" + str(int(coord[0]/10)+1) +  '-' + str(int(coord[1]/10)+1) +  '-' + coord[2]
+         #   send = "UPDATE-" + str(int(coord[0]/10)+1) +  '-' + str(int(coord[1]/10)+1) +  '-' + coord[2]
             # self.bt_comm.send_message(send)
-            send_coords.append(send)
+          #  send_coords.append(send)
             # time.sleep(1)
             
         formatted_cmds  = process_strings(robot_commands.split(','))
@@ -468,40 +553,52 @@ class RPiServer:
             print(e)
 
         i = 0
-        while not self.stm_comm.command_queue.empty():
-            stm_command = self.stm_comm.command_queue.get()
-
-            # Case 1: Pause Command (Take photo)
-            if stm_command.startswith('P_'):  # Pause command
-                # Extract the pause time; assuming format 'P___<number>'
-                obj_id_str = ''.join(filter(str.isdigit, message))
-                print('OBJ-ID_STR')
+        first_command = self.stm_comm.command_queue.get()
+        if first_command.startswith('P_'):
+            obj_id_str = ''.join(filter(str.isdigit, first_command))
+            print('OBJ-ID_STR')
+            print(obj_id_str)
+            try:
+                obj_id_int= int(obj_id_str)
+            except Exception as e:
+                obj_id_int= int(obj_id_str)
                 print(obj_id_str)
-                try:
-                    obj_id_int= int(obj_id_str)
-                except Exception as e:
-                    obj_id_int= int(obj_id_str)
+                print(e)
+
+            self.image_rec(obj_id_int)
+        else:
+            res= self.stm_comm.send_next_command(first_command).split('|')[0]
+        
+        count = 0
+        while not self.stm_comm.command_queue.empty():
+            if res == 'ACK':
+                stm_command = self.stm_comm.command_queue.get()
+                print('STM_COMMAND')
+                print(stm_command)
+                # Case 1: Pause Command (Take photo)
+                if stm_command.startswith('P_'):  # Pause command
+                    # Extract the pause time; assuming format 'P___<number>'
+                    obj_id_str = ''.join(filter(str.isdigit, stm_command))
+                    print('OBJ-ID_STR')
                     print(obj_id_str)
-                    print(e)
+                    try:
+                        obj_id_int= int(obj_id_str)
+                    except Exception as e:
+                        obj_id_int= int(obj_id_str)
+                        print(obj_id_str)
+                        print(e)
 
-                self.image_rec(obj_id_int)
-                time.sleep(1)
+                    self.image_rec(obj_id_int)#keeps taking,and when its time to take for obstacle pass in  obj id
+                    #time.sleep(1)
+                else:
+                    # add part on changing sleep time according to what previous turn was it 
+                    #stm command['F020', 'FR20', 'F010', 'P___0', 'B030', 'FR20', 'B020', 'BL20', 'FL20', 'F020', 'P___0']
+                    # time.sleep(1)
+                    res = self.stm_comm.send_next_command(stm_command).split('|')[0]
 
-            # Case 2: Non Pause Command
+                    
             else:
-                self.stm_comm.send_next_command(stm_command)
-                time.sleep(1)
-
-            self.bt_comm.send_message(send_coords[i])
-            i += 1
-
-        #send message here to android to tell it now then start the clock
-        # while True:
-        #     self.image_rec()
-        #send coord to algo
-
-        #algo send to stm
-
+                continue
 
         end= time.time()
         duration = end - self.bt_comm.start_time
@@ -510,28 +607,50 @@ class RPiServer:
         self.bt_comm.whichTask = ''
         self.android_info = None
         self.task_finshed = True
+        self.bt_comm.stop_image_rec=True
         return
+    
     def task_2(self):
-        self.start_stm()
-        self.stm_comm.send_next_command('S   ')
+        response = self.stm_comm.send_next_command('S   ')
         print('task 2 start...setting task_finish to false')
         self.task_finshed = False
-        count =0
-        while count <= 50:
-
+        # count = 0
+        count_2=0
+        while True:
+            while response != "A":
+                response = self.stm_comm.ser.readline().decode('utf-8').strip()
+                if count_2 > 4:
+                    print("breaking out of loop")
+                    break
+                print(response)
+                print("count 2:")
+                print(count_2)
+                count_2+=1
+            if count_2 > 4:
+                self.bt_comm.stop_image_rec=True
+                break
+            self.bt_comm.stop_image_rec=False
             self.image_rec(None)
-            count +=1
+            self.bt_comm.stop_image_rec=True
+            # count +=1
             print(self.predict_image_result)
             if self.predict_image_result:
-                final_result = self.predict_image_result[0]
+                final_result = int(self.predict_image_result)
                 print('====')
                 print(final_result)
-                if final_result == 'left':
+                if final_result == 39:
                     print('++++=')
-                    self.stm_comm.send_next_command('L   ')
-                if final_result == 'right':
-                    self.stm_comm.send_next_command('R   ')
-                time.sleep(1)
+                    response = self.stm_comm.send_next_command('L   ')
+                    self.task2_logger.info(response)
+                    # response="AA"
+                elif final_result == 38:
+                    response = self.stm_comm.send_next_command('R   ')
+                    self.task2_logger.info(response)
+                    # response="AA"
+                
+
+                # time.sleep(5)
+                # self.predict_image_result[0] = None#reset if not will send prev one
             
         # final_result = Counter(results_store).most_common(1)
         # self.stm_comm.send_next_command(final_result)
@@ -541,6 +660,7 @@ class RPiServer:
         self.android_info = None
         self.task_finshed = True
         return
+    
     def run(self):
         """Main server loop that captures images and sends them to the server."""
         print('RPi server started...')
@@ -553,7 +673,9 @@ class RPiServer:
         # self.stm_monitor_thread.start()
 
         self.start_bluetooth()
-
+        self.start_stm()
+        # self.bt_comm.whichTask = 'task2'
+        self.bt_comm.stop_image_rec = True
         try:
             while not self.stop_event.is_set():
                 if not self.camera_initialized:
@@ -581,12 +703,7 @@ class RPiServer:
                     elif self.bt_comm.stop_image_rec and self.bt_comm.test_chat:
                         print("===CHAT ENABLED===")
                         msg_to_android = input("Enter message:")
-                        self.bt_comm.send_message(msg_to_android)
-            
-
-                    
-                    
-                   
+                        self.bt_comm.send_message(msg_to_android)          
                     
                 # If Bluetooth gets disconnected, loop back to check for connection
                 print('Bluetooth disconnected. Waiting for reconnection...')

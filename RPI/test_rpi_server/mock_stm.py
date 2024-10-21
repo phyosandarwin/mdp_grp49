@@ -48,66 +48,89 @@ class STM_Controller(threading.Thread):
         if isinstance(commands, list):  # Ensure commands is a list
             for i,command in enumerate(commands):
                 self.add_command(command)
-                self.stm_to_rpi_queue.put(send_coords[i])
+                if not send_coords:
+                    continue
+                else:
+                    self.stm_to_rpi_queue.put(send_coords[i])
                 
         else:
             print("Error: add_commands expects a list of commands.")
 
-    def send_next_command(self):
+    def send_next_command(self, message):
         """Send the next command in the queue to the robot or simulate in mock mode."""
+        # # try:
+        # #     # Attempt to get a command with a timeout to allow thread to exit gracefully
+        # #     message = self.command_queue.get(timeout=2)
+        # #     print(f'message from command queue is {message}')
+        # # except queue.Empty:
+        # #     # No command to process at the moment
+        # #     print(f'EMPTY QUEUE')
+        # #     self.running=False
+        # #     return
+
+        # # if message.startswith('P_'):  # Pause command
+        # #     try:
+        # #         # Extract the pause time; assuming format 'P___<number>'
+        # #         obj_id_str = ''.join(filter(str.isdigit, message))
+        # #         obj_id_int= int(obj_id_str)
+        # #     except ValueError:
+        # #         pause_time = 1
+        # #         print(f"[MOCK_STM.py]Invalid  command {message}")
+
+        # #     print(f"Pause command detected: {message}. Signaling main server to pause for OBJECT {obj_id_int}")
+        # #     # Send the pause time to the main server via the pause_queue
+        # #     self.pause_queue.put(obj_id_int)
+        # #     # Wait until the main server signals that pause is done
+        # #     self.pause_done_event.wait()
+        # #     self.pause_done_event.clear()
+        # #     print(f"Pause for OBJECT {obj_id_int}. Resuming command execution.")
+        # #     return  # Exit after handling pause
+
+        # # if self.mock:
+        # #     print(f"[Mock Mode] Sent: {message}")
+        # #     self.stm_to_rpi_queue.put(message)
+        # #     # Simulate a response
+        # #     response = f"[Mock Mode] Response to {message}"
+        # #     # time.sleep(self.stm_buffer_time)
+        # #     print(f"[Mock Mode] Received: {response}")
+        # # else:
+        #     try:
         try:
-            # Attempt to get a command with a timeout to allow thread to exit gracefully
-            message = self.command_queue.get(timeout=2)
-            print(f'message from command queue is {message}')
-        except queue.Empty:
-            # No command to process at the moment
-            print(f'EMPTY QUEUE')
-            self.running=False
-            return
+            self.ser.write(message.encode('utf-8'))
+            print(f"Sent: {message}")
 
-        if message.startswith('P_'):  # Pause command
-            try:
-                # Extract the pause time; assuming format 'P___<number>'
-                obj_id_str = ''.join(filter(str.isdigit, message))
-                obj_id_int= int(obj_id_str)
-            except ValueError:
-                pause_time = 1
-                print(f"[MOCK_STM.py]Invalid  command {message}")
+            # Wait for a response with a short delay
+            # time.sleep(self.stm_buffer_time)  
 
-            print(f"Pause command detected: {message}. Signaling main server to pause for OBJECT {obj_id_int}")
-            # Send the pause time to the main server via the pause_queue
-            self.pause_queue.put(obj_id_int)
-            # Wait until the main server signals that pause is done
-            self.pause_done_event.wait()
-            self.pause_done_event.clear()
-            print(f"Pause for OBJECT {obj_id_int}. Resuming command execution.")
-            return  # Exit after handling pause
-
-        if self.mock:
-            print(f"[Mock Mode] Sent: {message}")
-            self.stm_to_rpi_queue.put(message)
-            # Simulate a response
-            response = f"[Mock Mode] Response to {message}"
-            # time.sleep(self.stm_buffer_time)
-            print(f"[Mock Mode] Received: {response}")
-        else:
-            try:
-                self.ser.write(message.encode('utf-8'))
-                print(f"Sent: {message}")
-
-                # Wait for a response with a short delay
-                time.sleep(self.stm_buffer_time)  
-
-                #send to android here
-                
+            #send to android here
+            response = None
+            count = 0
+            # while response != "ACK|":#ACK| for task 1 A for task 2
+            #     # count+=1
+            #     response = self.ser.readline().decode('utf-8').strip()
+            #     print(response)
+            #     # if count > 4:
+                #     break
+            while response != "A":#ACK| for task 1 A for task 2
+                count+=1
                 response = self.ser.readline().decode('utf-8').strip()
-                if response:
-                    print(f"Received: {response}")
-                else:
-                    print("No response received")
+                print(response)
+                if count > 4:
+                    break
+                
+            
+            if response:
+                print(f"Received: {response}")
+                return response
+            else:
+                print("No response received")
+                return "No response"
+        except Exception as e:
+            print(e)
+            return None
 
-            except Exception as e:
-                print(f"Error sending command: {e}")
+            # except Exception as e:
+            #     print(f"Error sending command: {e}")
 
     def clear_commands(self):
         """Clear all commands in the queue."""
@@ -121,8 +144,6 @@ class STM_Controller(threading.Thread):
         while self.running:
             self.send_next_command()
             
-            # Optional: Add a small delay to prevent tight loop
-            time.sleep(0.1)
         # self.disconnect()
         print("STM_Controller thread has been stopped.")
 

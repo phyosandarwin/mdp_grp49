@@ -18,7 +18,7 @@ class BluetoothComm:
         
 
         #android
-        self.stop_image_rec = True#by default stopImageRec
+        self.stop_image_rec = False#by default stopImageRec
         self.android_info = None
         self.whichTask = ''
         self.start_time = None

@@ -35,7 +35,7 @@ def send_image_to_server(filename, url, bt_comm, retry_delay=5,retry_send_amount
                         print(f"Image {filename} successfully sent to {url}")
                         print("Bounding Boxes:", json_response['boxes'])
                         print("Confidence Scores:", result_conf)
-                        if 'class_name' in json_response:  # Send only when class name is identified
+                        if 'class_ids' in json_response:  # Send only when class name is identified
                             result_class_name = json_response['class_name']
                             print(f"class name = {result_class_name}")
                             print('---sending to android')

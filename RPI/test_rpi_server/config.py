@@ -18,7 +18,7 @@ class Config:
     RETRY_DELAY = 2  
     RETRY_SEND_MAX = 5
 
-    ALGO_PORT_NUMBER = 8007
+    ALGO_PORT_NUMBER = 8001
 
     # # Bluetooth settings
     # STOP_IMAGE_REC = False
